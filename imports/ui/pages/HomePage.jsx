@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useTracker } from 'meteor/react-meteor-data';
-import { Meteor } from 'meteor/meteor';
-import { Species } from '/imports/api/species/species';
-import MapView from '../components/MapView';
-import ScientificNameFilter from '../components/ScientificNameFilter';
-import StateProvinceFilter from '../components/StateProvinceFilter';
-import IUCNCategoryFilter from '../components/IUCNCategoryFilter';
-import ProximityFilter from '../components/ProximityFilter';
+import React, { useState, useEffect } from "react";
+import { useTracker } from "meteor/react-meteor-data";
+import { Meteor } from "meteor/meteor";
+import { Species } from "/imports/api/species/species";
+import MapView from "../components/MapView";
+import ScientificNameFilter from "../components/ScientificNameFilter";
+import StateProvinceFilter from "../components/StateProvinceFilter";
+import IUCNCategoryFilter from "../components/IUCNCategoryFilter";
+import ProximityFilter from "../components/ProximityFilter";
 
 // Función para calcular la distancia entre dos puntos usando la fórmula del Haversine
 const haversineDistance = (coords1, coords2) => {
@@ -26,16 +26,16 @@ const haversineDistance = (coords1, coords2) => {
 };
 
 const HomePage = () => {
-  const [scientificNameFilter, setScientificNameFilter] = useState('');
-  const [stateProvinceFilter, setStateProvinceFilter] = useState('');
-  const [iucnCategoryFilter, setIUCNCategoryFilter] = useState('');
-  const [proximityFilter, setProximityFilter] = useState('yes'); // Filtro de proximidad, predeterminado en "sí"
+  const [scientificNameFilter, setScientificNameFilter] = useState("");
+  const [stateProvinceFilter, setStateProvinceFilter] = useState("");
+  const [iucnCategoryFilter, setIUCNCategoryFilter] = useState("");
+  const [proximityFilter, setProximityFilter] = useState("yes"); // Filtro de proximidad, predeterminado en "sí"
   const [userLocation, setUserLocation] = useState(null);
   const [filteredSpecies, setFilteredSpecies] = useState([]);
 
   // Suscripción y obtención de datos de la colección Species
   const speciesData = useTracker(() => {
-    Meteor.subscribe('species.all');
+    Meteor.subscribe("species.all");
     return Species.find().fetch();
   });
 
@@ -55,29 +55,37 @@ const HomePage = () => {
 
   // Filtrar especies según la opción de proximidad y otros filtros
   useEffect(() => {
-    const filtered = speciesData.filter((species) => {
-      const speciesLocation = {
-        lat: species.latitude,
-        lon: species.longitude
-      };
-      const distance = userLocation ? haversineDistance(userLocation, speciesLocation) : Infinity;
+    // Solo ejecutar si speciesData tiene datos y proximityFilter o userLocation son válidos
+    if ((userLocation && proximityFilter === "yes") || proximityFilter === "no") {
+      const filtered = speciesData.filter((species) => {
+        const speciesLocation = {
+          lat: species.latitude,
+          lon: species.longitude
+        };
+        const distance = userLocation ? haversineDistance(userLocation, speciesLocation) : Infinity;
+  
+        return (
+          (proximityFilter === "no" || distance <= 60000) && // Filtrar por distancia si el filtro está en "sí"
+          (!scientificNameFilter || species.scientificName.toLowerCase().includes(scientificNameFilter.toLowerCase())) &&
+          (!stateProvinceFilter || species.stateProvince === stateProvinceFilter) &&
+          (!iucnCategoryFilter || species.iucnRedListCategory === iucnCategoryFilter || (iucnCategoryFilter === "NE" && !species.iucnRedListCategory))
+        );
+      });
 
-      return (
-        (proximityFilter === 'no' || distance <= 60000) && // Filtrar por distancia si el filtro está en "sí"
-        (!scientificNameFilter || species.scientificName.toLowerCase().includes(scientificNameFilter.toLowerCase())) &&
-        (!stateProvinceFilter || species.stateProvince === stateProvinceFilter) &&
-        (!iucnCategoryFilter || species.iucnRedListCategory === iucnCategoryFilter || (iucnCategoryFilter === 'NE' && !species.iucnRedListCategory))
-      );
-    });
-
-    setFilteredSpecies(filtered);
+      // Solo actualizar si el nuevo filtrado es diferente
+      setFilteredSpecies((prevFilteredSpecies) => {
+        if (JSON.stringify(prevFilteredSpecies) !== JSON.stringify(filtered)) {
+          return filtered;
+        }
+        return prevFilteredSpecies; // No actualizar si no hay cambios
+      });
+    }
   }, [userLocation, speciesData, scientificNameFilter, stateProvinceFilter, iucnCategoryFilter, proximityFilter]);
 
   return (
     <div>
       <h1>Species Map of the Pacific Region of Colombia</h1>
-      
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
         <ProximityFilter value={proximityFilter} onChange={setProximityFilter} />
         <ScientificNameFilter value={scientificNameFilter} onChange={setScientificNameFilter} />
         <StateProvinceFilter value={stateProvinceFilter} onChange={setStateProvinceFilter} />

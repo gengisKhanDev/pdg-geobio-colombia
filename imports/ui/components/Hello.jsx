@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Meteor } from 'meteor/meteor';
+import React, { useState } from "react";
+import { Meteor } from "meteor/meteor";
 
 export const Hello = () => {
   const [speciesData, setSpeciesData] = useState([]);
@@ -10,11 +10,11 @@ export const Hello = () => {
     const longitude = -76.5205;
     const radius = 100;
     // Llamada al método del servidor
-    Meteor.call('species.fetchFromGBIF', latitude, longitude, radius, (error, result) => {
+    Meteor.call("species.fetchFromGBIF", latitude, longitude, radius, (error, result) => {
       if (error) {
-        console.error('Error fetching species:', error);
+        console.error("Error fetching species:", error);
       } else {
-        console.log('Fetched species:', result);
+        console.log("Fetched species:", result);
         setSpeciesData(result); // Guardar los datos en el estado para mostrar
       }
     });

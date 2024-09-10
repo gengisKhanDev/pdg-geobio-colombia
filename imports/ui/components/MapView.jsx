@@ -1,11 +1,11 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import React from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 // URL del ícono por defecto
-const defaultIconUrl = '/icon-geobio.png'; // Reemplaza con la URL de tu ícono por defecto
-const userIconUrl = '/user-icon-map.png'; // Reemplaza con la URL de un ícono para la ubicación del usuario
+const defaultIconUrl = "/icon-geobio.png"; // Reemplaza con la URL de tu ícono por defecto
+const userIconUrl = "/user-icon-map.png"; // Reemplaza con la URL de un ícono para la ubicación del usuario
 
 const MapView = ({ speciesData, userLocation }) => {
   const center = userLocation ? [userLocation.lat, userLocation.lon] : [3.42158, -76.5205];
@@ -18,7 +18,7 @@ const MapView = ({ speciesData, userLocation }) => {
       iconSize: [50, 50], // Ajusta el tamaño de la imagen del marcador
       iconAnchor: [25, 50], // Punto de anclaje del ícono (la base del marcador)
       popupAnchor: [0, -50], // Posición del popup en relación al marcador
-      className: 'custom-marker-icon' // Clase para estilizar el ícono si es necesario
+      className: "custom-marker-icon" // Clase para estilizar el ícono si es necesario
     });
   };
 

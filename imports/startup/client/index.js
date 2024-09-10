@@ -1,2 +1,2 @@
-import './Route.jsx';
+import "./Route.jsx";
 import "./fixtures.jsx";

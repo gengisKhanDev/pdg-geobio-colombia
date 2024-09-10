@@ -1,6 +1,6 @@
-import { Meteor } from 'meteor/meteor';
-import { Species } from '../species';
+import { Meteor } from "meteor/meteor";
+import { Species } from "../species";
 
-Meteor.publish('species.all', function publishSpecies() {
+Meteor.publish("species.all", function publishSpecies() {
   return Species.find();
 });

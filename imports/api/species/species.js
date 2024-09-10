@@ -1,4 +1,4 @@
-import { Mongo } from 'meteor/mongo';
+import { Mongo } from "meteor/mongo";
 
 // Define la colección Species
-export const Species = new Mongo.Collection('species');
+export const Species = new Mongo.Collection("species");
