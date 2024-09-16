@@ -21,7 +21,7 @@ export const Hello = () => {
 
   return (
     <div>
-      <button onClick={handleClick}>Click to Fetch</button>
+      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg" onClick={handleClick}>Click to Fetch</button>
       <div>
         <h2>Species Data:</h2>
         <pre>{JSON.stringify(speciesData, null, 2)}</pre>

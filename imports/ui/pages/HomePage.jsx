@@ -3,13 +3,10 @@ import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import { Species } from "/imports/api/species/species";
 import MapView from "../components/MapView";
-import ScientificNameFilter from "../components/ScientificNameFilter";
-import StateProvinceFilter from "../components/StateProvinceFilter";
-import IUCNCategoryFilter from "../components/IUCNCategoryFilter";
-import ProximityFilter from "../components/ProximityFilter";
+import 'flowbite';  // Asegúrate de importar Flowbite
+import FilterSidebar from '../components/FilterSidebar';
 
 const HomePage = () => {
-  // Función para calcular la distancia entre dos puntos usando la fórmula del Haversine
   const haversineDistance = (coords1, coords2) => {
     function toRad(x) {
       return (x * Math.PI) / 180;
@@ -29,10 +26,11 @@ const HomePage = () => {
     return d * 1000; // Retorna la distancia en metros
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);  // Control del sidebar
   const [scientificNameFilter, setScientificNameFilter] = useState("");
-  const [stateProvinceFilter, setStateProvinceFilter] = useState(""); // Filtro de departamento
+  const [stateProvinceFilter, setStateProvinceFilter] = useState("");
   const [iucnCategoryFilter, setIUCNCategoryFilter] = useState("");
-  const [proximityFilter, setProximityFilter] = useState("yes"); // Filtro de proximidad
+  const [proximityFilter, setProximityFilter] = useState("yes");
   const [userLocation, setUserLocation] = useState(null);
   const [filteredSpecies, setFilteredSpecies] = useState([]);
 
@@ -60,7 +58,7 @@ const HomePage = () => {
     }
   }, []);
 
-  // Filtrar especies según la opción de proximidad y otros filtros
+  // Filtrar especies según los filtros
   useEffect(() => {
     if (userLocation || proximityFilter === "no") {
       const filtered = speciesData.filter((species) => {
@@ -73,7 +71,7 @@ const HomePage = () => {
           : Infinity;
 
         return (
-          (proximityFilter === "no" || distance <= 60000) && // Filtrar por distancia si el filtro está en "sí"
+          (proximityFilter === "no" || distance <= 60000) &&
           (!scientificNameFilter ||
             species.scientificName
               .toLowerCase()
@@ -90,7 +88,7 @@ const HomePage = () => {
         if (JSON.stringify(prevFilteredSpecies) !== JSON.stringify(filtered)) {
           return filtered;
         }
-        return prevFilteredSpecies; // No actualizar si no hay cambios
+        return prevFilteredSpecies;
       });
     }
   }, [
@@ -103,35 +101,33 @@ const HomePage = () => {
   ]);
 
   return (
-    <div>
-      <h1>Species Map of the Pacific Region of Colombia</h1>
+    <div className="relative">
+      {/* Botón flotante sobre el mapa para abrir/cerrar el sidebar */}
+      <button
+      className="absolute top-20 left-4 p-2 bg-green-600 text-white rounded-md shadow-lg button-top"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        {sidebarOpen ? "Close Filters" : "Open Filters"}
+      </button>
 
-      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-        <ProximityFilter
-          value={proximityFilter}
-          onChange={setProximityFilter}
-        />
-        <ScientificNameFilter
-          value={scientificNameFilter}
-          onChange={setScientificNameFilter}
-        />
-        <StateProvinceFilter
-          value={stateProvinceFilter}
-          onChange={setStateProvinceFilter}
-        />
-        <IUCNCategoryFilter
-          value={iucnCategoryFilter}
-          onChange={setIUCNCategoryFilter}
-        />
-      </div>
+      <FilterSidebar
+        sidebarOpen={sidebarOpen}
+        proximityFilter={proximityFilter}
+        setProximityFilter={setProximityFilter}
+        scientificNameFilter={scientificNameFilter}
+        setScientificNameFilter={setScientificNameFilter}
+        stateProvinceFilter={stateProvinceFilter}
+        setStateProvinceFilter={setStateProvinceFilter}
+        iucnCategoryFilter={iucnCategoryFilter}
+        setIUCNCategoryFilter={setIUCNCategoryFilter}
+      />
 
-      {userLocation && (
-        <MapView
-          speciesData={filteredSpecies}
-          userLocation={userLocation}
-          selectedDepartment={stateProvinceFilter} // Pasar el departamento seleccionado a MapView
-        />
-      )}
+      {/* Mapa */}
+      <MapView
+        speciesData={filteredSpecies}
+        userLocation={userLocation}
+        selectedDepartment={stateProvinceFilter}  // Pasar el departamento seleccionado a MapView
+      />
     </div>
   );
 };
