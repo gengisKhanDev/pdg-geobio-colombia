@@ -1,28 +1,87 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
+import React, { useEffect } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polygon,
+  useMap,
+  ZoomControl
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { chocoCoords, valleDelCaucaCoords, caucaCoords, narinoCoords, worldCoords, colombiaCoords } from "./coordenadas.js";
+import {
+  chocoCoords,
+  valleDelCaucaCoords,
+  caucaCoords,
+  narinoCoords,
+  worldCoords,
+  colombiaCoords,
+  limitColombia,
+} from "./coordenadas.js";
+
+const pixelPatternUrl =
+  "data:image/svg+xml;base64," +
+  btoa(`
+  <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="4" height="4" fill="black" />
+    <rect x="6" y="6" width="4" height="4" fill="black" />
+  </svg>
+`);
+
+// Este componente controla los límites del mapa según el departamento seleccionado
+const MapController = ({ selectedDepartment }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    const bounds = {
+      Cauca: L.latLngBounds(caucaCoords),
+      Chocó: L.latLngBounds(chocoCoords),
+      Nariño: L.latLngBounds(narinoCoords),
+      "Valle del Cauca": L.latLngBounds(valleDelCaucaCoords),
+      All: L.latLngBounds([
+        [1.396967, -78.189532],
+        [6.253041, -76.5205],
+      ]),
+    };
+
+    if (selectedDepartment && bounds[selectedDepartment]) {
+      map.flyToBounds(bounds[selectedDepartment], { duration: 1.5 });
+    }
+  }, [selectedDepartment, map]);
+
+  return null;
+};
 
 const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
   const center = userLocation
     ? [userLocation.lat, userLocation.lon]
     : [3.42158, -76.5205];
-  const zoomLevel = 8;
+  const zoomLevel = 7;
 
   const polygonOptions = {
     color: "green",
     fillColor: "lightgreen",
+    weight: 5,
+    stroke: true,
     fillOpacity: 0.5,
   };
 
   const darkOverlayOptions = {
     color: "black",
     fillColor: "black",
+    weight: 1,
     fillOpacity: 0.9,
     stroke: false,
   };
 
+  const darkOverlayOutpout = {
+    color: "green",
+    fillColor: "black",
+    weight: 3,
+    fillOpacity: 0.4,
+    stroke: true,
+  };
   // Función para dibujar todos los polígonos por defecto
   const drawAllPolygons = () => (
     <>
@@ -30,21 +89,63 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
       <Polygon pathOptions={polygonOptions} positions={valleDelCaucaCoords} />
       <Polygon pathOptions={polygonOptions} positions={caucaCoords} />
       <Polygon pathOptions={polygonOptions} positions={narinoCoords} />
+      <Polygon
+        pathOptions={{
+          ...darkOverlayOutpout,
+          fillPatternUrl: pixelPatternUrl,
+        }}
+        positions={[
+          colombiaCoords,
+          chocoCoords,
+          valleDelCaucaCoords,
+          caucaCoords,
+          narinoCoords,
+        ]}
+      />
     </>
   );
 
-  // Función para obtener los polígonos dependiendo del departamento seleccionado
   const getPolygonCoords = () => {
     switch (selectedDepartment) {
       case "Cauca":
-        return <Polygon pathOptions={polygonOptions} positions={caucaCoords} />;
+        return (
+          <Polygon
+            pathOptions={{
+              ...darkOverlayOutpout,
+              fillPatternUrl: pixelPatternUrl,
+            }}
+            positions={[colombiaCoords, caucaCoords]}
+          />
+        );
       case "Chocó":
-        return <Polygon pathOptions={polygonOptions} positions={chocoCoords} />;
+        return (
+          <Polygon
+            pathOptions={{
+              ...darkOverlayOutpout,
+              fillPatternUrl: pixelPatternUrl,
+            }}
+            positions={[colombiaCoords, chocoCoords]}
+          />
+        );
       case "Nariño":
-        return <Polygon pathOptions={polygonOptions} positions={narinoCoords} />;
+        return (
+          <Polygon
+            pathOptions={{
+              ...darkOverlayOutpout,
+              fillPatternUrl: pixelPatternUrl,
+            }}
+            positions={[colombiaCoords, narinoCoords]}
+          />
+        );
       case "Valle del Cauca":
         return (
-          <Polygon pathOptions={polygonOptions} positions={valleDelCaucaCoords} />
+          <Polygon
+            pathOptions={{
+              ...darkOverlayOutpout,
+              fillPatternUrl: pixelPatternUrl,
+            }}
+            positions={[colombiaCoords, valleDelCaucaCoords]}
+          />
         );
       default:
         return drawAllPolygons();
@@ -55,15 +156,20 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
     <MapContainer
       center={center}
       zoom={zoomLevel}
-      style={{ height: "100vh", width: "100vw" }}  // Ocupar toda la pantalla
+      style={{ height: "100vh", width: "100vw" }}
       minZoom={5}
-      maxBounds={colombiaCoords}
+      maxBounds={limitColombia}
       maxBoundsViscosity={1.0}
+      zoomControl={false}
+      scrollWheelZoom={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+
+      {/* Control de mapa según el departamento seleccionado */}
+      <MapController selectedDepartment={selectedDepartment} />
 
       {/* Mostrar el polígono del departamento seleccionado o todos los polígonos */}
       {getPolygonCoords()}
@@ -132,6 +238,7 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
         pathOptions={darkOverlayOptions}
         positions={[worldCoords, colombiaCoords]}
       />
+      <ZoomControl position={"topright"} />
     </MapContainer>
   );
 };

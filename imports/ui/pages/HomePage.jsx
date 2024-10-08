@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import { Species } from "/imports/api/species/species";
 import MapView from "../components/MapView";
-import 'flowbite';  // Asegúrate de importar Flowbite
-import FilterSidebar from '../components/FilterSidebar';
+import "flowbite";
+import { FilterCard } from "../components/FilterCard";
+import FilterSidebar from "../components/FilterSidebar";
 
 const HomePage = () => {
+  const sidebarRef = useRef(null); // Ref for the sidebar
   const haversineDistance = (coords1, coords2) => {
     function toRad(x) {
       return (x * Math.PI) / 180;
@@ -26,7 +28,7 @@ const HomePage = () => {
     return d * 1000; // Retorna la distancia en metros
   };
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);  // Control del sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Control del sidebar
   const [scientificNameFilter, setScientificNameFilter] = useState("");
   const [stateProvinceFilter, setStateProvinceFilter] = useState("");
   const [iucnCategoryFilter, setIUCNCategoryFilter] = useState("");
@@ -57,6 +59,25 @@ const HomePage = () => {
       );
     }
   }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Ensure that the ref is checking the wrapper div, not the Sidebar component
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar when clicking outside
+      }
+    }
+
+    if (sidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarOpen]);
 
   // Filtrar especies según los filtros
   useEffect(() => {
@@ -103,15 +124,19 @@ const HomePage = () => {
   return (
     <div className="relative">
       {/* Botón flotante sobre el mapa para abrir/cerrar el sidebar */}
-      <button
-      className="absolute top-20 left-4 p-2 bg-green-600 text-white rounded-md shadow-lg button-top"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        {sidebarOpen ? "Close Filters" : "Open Filters"}
-      </button>
+      {!sidebarOpen && <FilterCard
+          onOpen={() => setSidebarOpen(true)}
+          scientificName={scientificNameFilter}
+          setScientificName={setScientificNameFilter}
+        />}
+      {/* Agregar overlay solo cuando el sidebar está abierto */}
+      {sidebarOpen && <div className="overlay"></div>}
 
+      {/* Sidebar con clases dinámicas para abrir o cerrar */}
       <FilterSidebar
+        ref={sidebarRef}
         sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
         proximityFilter={proximityFilter}
         setProximityFilter={setProximityFilter}
         scientificNameFilter={scientificNameFilter}
@@ -126,7 +151,7 @@ const HomePage = () => {
       <MapView
         speciesData={filteredSpecies}
         userLocation={userLocation}
-        selectedDepartment={stateProvinceFilter}  // Pasar el departamento seleccionado a MapView
+        selectedDepartment={stateProvinceFilter} // Pasar el departamento seleccionado a MapView
       />
     </div>
   );
