@@ -5,7 +5,9 @@ import StateProvinceFilter from "./StateProvinceFilter";
 import IUCNCategoryFilter from "./IUCNCategoryFilter";
 import { Sidebar } from "flowbite-react";
 import { HiFilter, HiAdjustments, HiX, HiLogin } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import { useNavigate } from 'react-router-dom';
 
 const FilterSidebar = forwardRef(
   (
@@ -23,6 +25,16 @@ const FilterSidebar = forwardRef(
     },
     ref
   ) => {
+    const user = useTracker(() => Meteor.user()); // Estado del usuario
+    const navigate = useNavigate(); // Para la navegación entre páginas
+
+    const handleLoginClick = () => {
+      if (user) {
+        navigate("/myaccount"); // Si el usuario está logueado, va a "My Account"
+      } else {
+        navigate("/login"); // Si no está logueado, lo lleva a la página de Login
+      }
+    };
     return (
       <div ref={ref} className="sidebar fixed top-0 left-0 h-full">
         <Sidebar
@@ -76,12 +88,12 @@ const FilterSidebar = forwardRef(
                   onChange={setIUCNCategoryFilter}
                 />
               </Sidebar.Item>
-              {/* Login Button */}
-              <Sidebar.Item icon={HiLogin}>
-                <Link to="/login" className="text-blue-600">
-                  Login
-                </Link>
-              </Sidebar.Item>
+              <button
+          className="p-2 bg-blue-600 text-white rounded mt-4"
+          onClick={handleLoginClick}
+        >
+          {user ? "My Account" : "Login"}
+        </button>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>

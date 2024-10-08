@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Updated to useNavigate
+import { useTracker } from 'meteor/react-meteor-data';
 
 const LoginPage = () => {
+  const user = useTracker(() => Meteor.user());
+
+  if (user) {
+    window.location.href = '/homepage';
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // Updated hook for navigation
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add login logic here (e.g., API call for authentication)
-    console.log("Login successful");
+    Meteor.loginWithPassword(email, password, (error) => {
+      if (error) {
+        alert('Error al iniciar sesión: ' + error.reason);
+      } else {
+        // Redirige al usuario a la página principal
+        navigate("/homepage"); // Updated to navigate to home page
 
-    // Redirect to the homepage or another page after successful login
-    navigate("/"); // Updated to navigate to home page
+        // window.location.href = '/homepage';
+      }
+    });
   };
 
   return (
