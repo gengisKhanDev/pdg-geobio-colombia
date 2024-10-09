@@ -1,50 +1,90 @@
 import "../../api/species/server/publications.js";
 import "../../api/species/methods.js";
+import { Random } from "meteor/random";
+
 import { Users } from "../../api/users/users.js";
 import { Settings } from "../../api/settings/settings.js";
 
-Meteor.startup(() => {
-  if(Users.find().countAsync() == 0){
-    Accounts.createUser({
-      username: "admin",
-      email: "admin@admin.com",
-      password: "S9rDRPpWLjNts3Un6ThgyXa3gE2fhW5p",
-      createdAt: new Date(),
-      profile: {
-        firstName: "Super",
-        lastName: "Admin",
-        role: {
-          name: "Admin"
+Meteor.startup(async () => {
+  let adminRole = Random.id();
+  let userRole = Random.id();
+  try {
+    const userCount = await Users.find().countAsync();
+    if (userCount === 0) {
+      // Crear el usuario administrador
+      await Accounts.createUser({
+        username: "admin",
+        email: "admin@admin.com",
+        password: "6l`0Uf;55k{^",
+        createdAt: new Date(),
+        profile: {
+          firstName: "Super",
+          lastName: "Admin",
+          role: {
+            id: adminRole,
+            name: "Admin"
+          }
         }
-      }
-    });
+      });
+
+      // Crear el usuario de prueba
+      await Accounts.createUser({
+        username: "user",
+        email: "user@user.com",
+        password: "Bx5EE8O(/77j",
+        createdAt: new Date(),
+        profile: {
+          firstName: "User",
+          lastName: "Test",
+          role: {
+            id: userRole,
+            name: "User"
+          }
+        }
+      });
+      console.log('Usuarios creados correctamente');
+    }
+  } catch (error) {
+    console.error("Error contando usuarios o creando usuarios:", error);
+    return; // Salir de la función si ocurre un error
   }
 
-  if(typeof Settings.findOneAsync({_id: "roles"}) === "undefined"){
-    console.log("Inserting [Settings=Roles]");
-    const superAdmin = Users.findOneAsync({"profile.role.name": "Admin"});
-    const createdByObj = {
-      id: superAdmin._id,
-      name: superAdmin.profile.firstName + " " + superAdmin.profile.lastName
+  try {
+    const setting = await Settings.findOneAsync({ _id: "roles" });
+    const superAdmin = await Users.findOneAsync({ "profile.role.name": "Admin" });
+
+    if (!setting && superAdmin) {
+      console.log("Insertando [Settings=Roles]");
+      const createdByObj = {
+        id: superAdmin._id,
+        name: `${superAdmin.profile.firstName} ${superAdmin.profile.lastName}`
+      };
+      const today = new Date();
+
+      const rolesArr = [
+        {
+          id: adminRole,
+          name: "Admin",
+          createdAt: today,
+          createdBy: createdByObj
+        },
+        {
+          id: userRole,
+          name: "User",
+          createdAt: today,
+          createdBy: createdByObj
+        }
+      ];
+
+      // Insertar los roles en la configuración
+      await Settings.insertAsync({
+        _id: "roles",
+        roles: rolesArr
+      });
+      console.log("Roles insertados correctamente");
     }
-    const today = new Date();
-
-    const rolesArr = [{
-      id: Random.id(),
-      name: "Admin",
-      createdAt: today,
-      createdBy: createdByObj
-    },{
-      id: Random.id(),
-      name: "User",
-      createdAt: today,
-      createdBy: createdByObj
-    }];
-
-    Settings.insert({
-      _id: "roles",
-      roles: rolesArr
-    });
+  } catch (error) {
+    console.error("Error insertando roles:", error);
   }
 
   // //Configures "reset password account" email link

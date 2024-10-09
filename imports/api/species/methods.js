@@ -49,5 +49,18 @@ Meteor.methods({
       console.error("Error in GBIF API request:", error);
       throw new Meteor.Error("GBIF API request failed", error.message);
     }
-  }
+  },
+  "species.addPhoto"(speciesId, photo) {
+    // check(speciesId, String);
+    // check(photo, {
+    //   image: String,
+    //   uploadedBy: String,
+    //   status: String,
+    // });
+    console.log(photo)
+    // Species.update(
+    //   { _id: speciesId },
+    //   { $push: { photosUsers: photo } }
+    // );
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -6,9 +6,10 @@ import {
   Popup,
   Polygon,
   useMap,
-  ZoomControl
+  ZoomControl,
 } from "react-leaflet";
 import L from "leaflet";
+import { Modal, Button } from "flowbite-react";
 import "leaflet/dist/leaflet.css";
 import {
   chocoCoords,
@@ -19,6 +20,7 @@ import {
   colombiaCoords,
   limitColombia,
 } from "./coordenadas.js";
+import SpeciesModal from "./SpeciesModal";
 
 const pixelPatternUrl =
   "data:image/svg+xml;base64," +
@@ -29,7 +31,6 @@ const pixelPatternUrl =
   </svg>
 `);
 
-// Este componente controla los límites del mapa según el departamento seleccionado
 const MapController = ({ selectedDepartment }) => {
   const map = useMap();
 
@@ -54,6 +55,9 @@ const MapController = ({ selectedDepartment }) => {
 };
 
 const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
+  const [selectedSpecies, setSelectedSpecies] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const center = userLocation
     ? [userLocation.lat, userLocation.lon]
     : [3.42158, -76.5205];
@@ -82,7 +86,13 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
     fillOpacity: 0.4,
     stroke: true,
   };
-  // Función para dibujar todos los polígonos por defecto
+
+  const handleModalClose = () => setIsModalOpen(false);
+  const handleViewMoreClick = (species) => {
+    console.log("View More clicked for:", species.scientificName);
+    setSelectedSpecies(species);
+    setIsModalOpen(true);
+  };
   const drawAllPolygons = () => (
     <>
       <Polygon pathOptions={polygonOptions} positions={chocoCoords} />
@@ -153,93 +163,99 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
   };
 
   return (
-    <MapContainer
-      center={center}
-      zoom={zoomLevel}
-      style={{ height: "100vh", width: "100vw" }}
-      minZoom={5}
-      maxBounds={limitColombia}
-      maxBoundsViscosity={1.0}
-      zoomControl={false}
-      scrollWheelZoom={false}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-
-      {/* Control de mapa según el departamento seleccionado */}
-      <MapController selectedDepartment={selectedDepartment} />
-
-      {/* Mostrar el polígono del departamento seleccionado o todos los polígonos */}
-      {getPolygonCoords()}
-
-      {/* Mostrar la ubicación del usuario */}
-      {userLocation && (
-        <Marker
-          position={[userLocation.lat, userLocation.lon]}
-          icon={L.icon({
-            iconUrl: "/user-icon-map.png",
-            iconSize: [20, 20],
-            iconAnchor: [20, 40],
-            popupAnchor: [0, -40],
-          })}
-        >
-          <Popup>You are here</Popup>
-        </Marker>
+    <>
+      <MapContainer
+        center={center}
+        zoom={zoomLevel}
+        style={{ height: "100vh", width: "100vw" }}
+        minZoom={5}
+        maxBounds={limitColombia}
+        maxBoundsViscosity={1.0}
+        zoomControl={false}
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <MapController selectedDepartment={selectedDepartment} />
+        {getPolygonCoords()}
+        {userLocation && (
+          <Marker
+            position={[userLocation.lat, userLocation.lon]}
+            icon={L.icon({
+              iconUrl: "/user-icon-map.png",
+              iconSize: [20, 20],
+              iconAnchor: [20, 40],
+              popupAnchor: [0, -40],
+            })}
+          >
+            <Popup>You are here</Popup>
+          </Marker>
+        )}
+        {speciesData.map((species) => (
+          <Marker
+            key={species._id}
+            position={[species.latitude, species.longitude]}
+            icon={L.icon({
+              iconUrl: species.media?.identifier || "/icon-geobio.png",
+              iconSize: [50, 50],
+              iconAnchor: [25, 50],
+              popupAnchor: [0, -50],
+            })}
+          >
+            <Popup>
+              <div>
+                <b>{species.scientificName}</b>
+                <br />
+                <i>{species.family}</i>
+                <br />
+                <span>Class: {species.class}</span>
+                <br />
+                <span>
+                  Location: {species.verbatimLocality}, {species.stateProvince}
+                </span>
+                <br />
+                <img
+                  src={species.media?.identifier || "/icon-geobio.png"}
+                  alt={species.scientificName}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                />
+                <br />
+                <span>Photo by: {species.media?.creator}</span>
+                <br />
+                <a
+                  href={species.media?.references}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View on iNaturalist
+                </a>
+                <br />
+                <Button
+                  onClick={() => handleViewMoreClick(species)}
+                  className="p-2 bg-blue-600 text-white rounded mt-4"
+                >
+                  View More
+                </Button>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+        <Polygon
+          pathOptions={darkOverlayOptions}
+          positions={[worldCoords, colombiaCoords]}
+        />
+        <ZoomControl position={"topright"} />
+      </MapContainer>
+      {selectedSpecies && (
+        <SpeciesModal species={selectedSpecies} onClose={() => setSelectedSpecies(null)} />
       )}
-
-      {/* Mostrar marcadores de especies */}
-      {speciesData.map((species) => (
-        <Marker
-          key={species._id}
-          position={[species.latitude, species.longitude]}
-          icon={L.icon({
-            iconUrl: species.media?.identifier || "/icon-geobio.png",
-            iconSize: [50, 50],
-            iconAnchor: [25, 50],
-            popupAnchor: [0, -50],
-          })}
-        >
-          <Popup>
-            <div>
-              <b>{species.scientificName}</b>
-              <br />
-              <i>{species.family}</i>
-              <br />
-              <span>Class: {species.class}</span>
-              <br />
-              <span>
-                Location: {species.verbatimLocality}, {species.stateProvince}
-              </span>
-              <br />
-              <img
-                src={species.media?.identifier || "/icon-geobio.png"}
-                alt={species.scientificName}
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
-              />
-              <br />
-              <span>Photo by: {species.media?.creator}</span>
-              <br />
-              <a
-                href={species.media?.references}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on iNaturalist
-              </a>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
-
-      {/* Capa oscura en todo el mundo excepto Colombia */}
-      <Polygon
-        pathOptions={darkOverlayOptions}
-        positions={[worldCoords, colombiaCoords]}
-      />
-      <ZoomControl position={"topright"} />
-    </MapContainer>
+    </>
   );
 };
 

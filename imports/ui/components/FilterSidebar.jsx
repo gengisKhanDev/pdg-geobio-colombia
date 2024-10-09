@@ -5,9 +5,9 @@ import StateProvinceFilter from "./StateProvinceFilter";
 import IUCNCategoryFilter from "./IUCNCategoryFilter";
 import { Sidebar } from "flowbite-react";
 import { HiFilter, HiAdjustments, HiX, HiLogin } from "react-icons/hi";
-import { useTracker } from 'meteor/react-meteor-data';
-import { Meteor } from 'meteor/meteor';
-import { useNavigate } from 'react-router-dom';
+import { useTracker } from "meteor/react-meteor-data";
+import { Meteor } from "meteor/meteor";
+import { useNavigate } from "react-router-dom";
 
 const FilterSidebar = forwardRef(
   (
@@ -89,11 +89,11 @@ const FilterSidebar = forwardRef(
                 />
               </Sidebar.Item>
               <button
-          className="p-2 bg-blue-600 text-white rounded mt-4"
-          onClick={handleLoginClick}
-        >
-          {user ? "My Account" : "Login"}
-        </button>
+                className="p-2 bg-blue-600 text-white rounded mt-4"
+                onClick={handleLoginClick}
+              >
+                {user ? "My Account" : "Login"}
+              </button>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>

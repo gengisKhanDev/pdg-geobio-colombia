@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import { Species } from "/imports/api/species/species";
@@ -34,7 +34,6 @@ const HomePage = () => {
   const [iucnCategoryFilter, setIUCNCategoryFilter] = useState("");
   const [proximityFilter, setProximityFilter] = useState("yes");
   const [userLocation, setUserLocation] = useState(null);
-  const [filteredSpecies, setFilteredSpecies] = useState([]);
 
   // Obtener las especies de la base de datos
   const speciesData = useTracker(() => {
@@ -80,9 +79,10 @@ const HomePage = () => {
   }, [sidebarOpen]);
 
   // Filtrar especies según los filtros
-  useEffect(() => {
+  // Reemplaza useEffect por useMemo para optimizar el filtrado
+  const filteredSpecies = useMemo(() => {
     if (userLocation || proximityFilter === "no") {
-      const filtered = speciesData.filter((species) => {
+      return speciesData.filter((species) => {
         const speciesLocation = {
           lat: species.latitude,
           lon: species.longitude,
@@ -104,14 +104,8 @@ const HomePage = () => {
             (iucnCategoryFilter === "NE" && !species.iucnRedListCategory))
         );
       });
-
-      setFilteredSpecies((prevFilteredSpecies) => {
-        if (JSON.stringify(prevFilteredSpecies) !== JSON.stringify(filtered)) {
-          return filtered;
-        }
-        return prevFilteredSpecies;
-      });
     }
+    return [];
   }, [
     userLocation,
     speciesData,
@@ -124,11 +118,13 @@ const HomePage = () => {
   return (
     <div className="relative">
       {/* Botón flotante sobre el mapa para abrir/cerrar el sidebar */}
-      {!sidebarOpen && <FilterCard
+      {!sidebarOpen && (
+        <FilterCard
           onOpen={() => setSidebarOpen(true)}
           scientificName={scientificNameFilter}
           setScientificName={setScientificNameFilter}
-        />}
+        />
+      )}
       {/* Agregar overlay solo cuando el sidebar está abierto */}
       {sidebarOpen && <div className="overlay"></div>}
 

@@ -22,3 +22,8 @@
   z-index: 700; /* Menor z-index que el sidebar */
   pointer-events: none; /* No bloquear la interacción */
 }
+.modal-bg {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5); /* For semi-transparent background */
+  z-index: 10000;
+}
