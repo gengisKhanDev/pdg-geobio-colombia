@@ -1,5 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Species } from "./species";
+import { check } from "meteor/check";
+
 import axios from "axios";
 
 const GBIF_API_URL = "https://api.gbif.org/v1/occurrence/search";
@@ -51,12 +53,12 @@ Meteor.methods({
     }
   },
   "species.addPhoto"(speciesId, photo) {
-    // check(speciesId, String);
-    // check(photo, {
-    //   image: String,
-    //   uploadedBy: String,
-    //   status: String,
-    // });
+    check(speciesId, String);
+    check(photo, {
+      image: String,
+      uploadedBy: String,
+      status: String,
+    });
     console.log(photo)
     // Species.update(
     //   { _id: speciesId },

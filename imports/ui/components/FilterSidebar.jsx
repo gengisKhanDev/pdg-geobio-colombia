@@ -1,8 +1,8 @@
 import React, { forwardRef } from "react";
-import ProximityFilter from "./ProximityFilter";
-import ScientificNameFilter from "./ScientificNameFilter";
-import StateProvinceFilter from "./StateProvinceFilter";
-import IUCNCategoryFilter from "./IUCNCategoryFilter";
+import ProximityFilter from "./sidebar/ProximityFilter";
+import ScientificNameFilter from "./sidebar/ScientificNameFilter";
+import StateProvinceFilter from "./sidebar/StateProvinceFilter";
+import IUCNCategoryFilter from "./sidebar/IUCNCategoryFilter";
 import { Sidebar } from "flowbite-react";
 import { HiFilter, HiAdjustments, HiX, HiLogin } from "react-icons/hi";
 import { useTracker } from "meteor/react-meteor-data";

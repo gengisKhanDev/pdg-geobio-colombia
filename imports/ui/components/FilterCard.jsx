@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "flowbite-react";
-import ScientificNameFilter from "./ScientificNameFilter";
+import ScientificNameFilter from "./sidebar/ScientificNameFilter";
 import { HiMenu, HiLocationMarker } from "react-icons/hi";
 
 export function FilterCard({ onOpen, scientificName, setScientificName }) {

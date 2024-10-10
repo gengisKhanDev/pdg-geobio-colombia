@@ -197,51 +197,63 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
           <Marker
             key={species._id}
             position={[species.latitude, species.longitude]}
-            icon={L.icon({
-              iconUrl: species.media?.identifier || "/icon-geobio.png",
-              iconSize: [50, 50],
-              iconAnchor: [25, 50],
-              popupAnchor: [0, -50],
+            icon={L.divIcon({
+              html: `
+                <div class="rounded-full overflow-hidden border border-gray-300 shadow-sm flex items-center justify-center">
+                  <img src="${species.media?.identifier || "/icon-geobio.png"}" alt="${
+                          species.scientificName
+                        }" class="w-12 h-12 object-cover"/>
+                </div>
+              `,
+              className: "", // Para eliminar estilos por defecto
+              iconSize: [48, 48], // Tamaño del icono
+              iconAnchor: [24, 48], // Ancla del icono
+              popupAnchor: [0, -48], // Ancla del popup
             })}
           >
             <Popup>
-              <div>
-                <b>{species.scientificName}</b>
-                <br />
-                <i>{species.family}</i>
-                <br />
-                <span>Class: {species.class}</span>
-                <br />
-                <span>
-                  Location: {species.verbatimLocality}, {species.stateProvince}
-                </span>
-                <br />
+              <div className="rounded-lg shadow-lg p-4 bg-white">
                 <img
                   src={species.media?.identifier || "/icon-geobio.png"}
                   alt={species.scientificName}
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
+                  className="w-full h-32 object-cover rounded-t-lg"
                 />
-                <br />
-                <span>Photo by: {species.media?.creator}</span>
-                <br />
-                <a
-                  href={species.media?.references}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on iNaturalist
-                </a>
-                <br />
-                <Button
-                  onClick={() => handleViewMoreClick(species)}
-                  className="p-2 bg-blue-600 text-white rounded mt-4"
-                >
-                  View More
-                </Button>
+                <div className="mt-2 text-center">
+                  <b className="text-lg">{species.scientificName}</b>
+                  <br />
+                  <i className="text-sm text-gray-600">{species.family}</i>
+                  <br />
+                  <span className="text-sm text-gray-600">
+                    Class: {species.class}
+                  </span>
+                  <br />
+                  <span className="text-sm text-gray-600">
+                    Location: {species.verbatimLocality},{" "}
+                    {species.stateProvince}
+                  </span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs text-gray-500">
+                    Photo by: {species.media?.creator}
+                  </span>
+                  <br />
+                  <a
+                    href={species.media?.references}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline text-sm"
+                  >
+                    View on iNaturalist
+                  </a>
+                </div>
+                <div className="mt-4 text-center">
+                  <Button
+                    onClick={() => handleViewMoreClick(species)}
+                    className="p-2 bg-blue-600 text-white rounded-full w-full"
+                  >
+                    View More
+                  </Button>
+                </div>
               </div>
             </Popup>
           </Marker>
@@ -253,7 +265,10 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
         <ZoomControl position={"topright"} />
       </MapContainer>
       {selectedSpecies && (
-        <SpeciesModal species={selectedSpecies} onClose={() => setSelectedSpecies(null)} />
+        <SpeciesModal
+          species={selectedSpecies}
+          onClose={() => setSelectedSpecies(null)}
+        />
       )}
     </>
   );
