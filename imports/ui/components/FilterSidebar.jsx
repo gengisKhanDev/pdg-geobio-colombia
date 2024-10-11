@@ -8,6 +8,7 @@ import { HiFilter, HiAdjustments, HiX, HiLogin } from "react-icons/hi";
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import { useNavigate } from "react-router-dom";
+import DistanceFilter from "./sidebar/DistanceFilter"; // Importar el nuevo componente
 
 const FilterSidebar = forwardRef(
   (
@@ -22,6 +23,8 @@ const FilterSidebar = forwardRef(
       setStateProvinceFilter,
       iucnCategoryFilter,
       setIUCNCategoryFilter,
+      distanceFilter, // Añadir el filtro de distancia como propiedad
+      setDistanceFilter, // Añadir la función para cambiar la distancia
     },
     ref
   ) => {
@@ -86,6 +89,13 @@ const FilterSidebar = forwardRef(
                 <IUCNCategoryFilter
                   value={iucnCategoryFilter}
                   onChange={setIUCNCategoryFilter}
+                />
+              </Sidebar.Item>
+              {/* Añadir el filtro de distancia */}
+              <Sidebar.Item icon={HiFilter}>
+                <DistanceFilter
+                  value={distanceFilter}
+                  onChange={setDistanceFilter}
                 />
               </Sidebar.Item>
               <button

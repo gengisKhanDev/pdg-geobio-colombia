@@ -34,6 +34,7 @@ const HomePage = () => {
   const [iucnCategoryFilter, setIUCNCategoryFilter] = useState("");
   const [proximityFilter, setProximityFilter] = useState("yes");
   const [userLocation, setUserLocation] = useState(null);
+  const [distanceFilter, setDistanceFilter] = useState(60); // Distancia inicial en kilómetros
 
   // Obtener las especies de la base de datos
   const speciesData = useTracker(() => {
@@ -45,7 +46,7 @@ const HomePage = () => {
   // Obtener la ubicación actual del usuario
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           setUserLocation({
             lat: position.coords.latitude,
@@ -54,14 +55,18 @@ const HomePage = () => {
         },
         (error) => {
           console.error("Error obteniendo la ubicación:", error);
-        }
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
+
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+      };
     }
   }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
-      // Ensure that the ref is checking the wrapper div, not the Sidebar component
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         setSidebarOpen(false); // Close sidebar when clicking outside
       }
@@ -92,7 +97,7 @@ const HomePage = () => {
           : Infinity;
 
         return (
-          (proximityFilter === "no" || distance <= 60000) &&
+          (proximityFilter === "no" || distance <= distanceFilter * 1000) &&
           (!scientificNameFilter ||
             species.scientificName
               .toLowerCase()
@@ -113,6 +118,7 @@ const HomePage = () => {
     stateProvinceFilter,
     iucnCategoryFilter,
     proximityFilter,
+    distanceFilter, // Añadir el filtro de distancia como dependencia
   ]);
 
   return (
@@ -123,7 +129,10 @@ const HomePage = () => {
           onOpen={() => setSidebarOpen(true)}
           scientificName={scientificNameFilter}
           setScientificName={setScientificNameFilter}
+          distanceFilter={distanceFilter}
+          setDistanceFilter={setDistanceFilter}
         />
+        // 
       )}
       {/* Agregar overlay solo cuando el sidebar está abierto */}
       {sidebarOpen && <div className="overlay"></div>}
@@ -141,6 +150,8 @@ const HomePage = () => {
         setStateProvinceFilter={setStateProvinceFilter}
         iucnCategoryFilter={iucnCategoryFilter}
         setIUCNCategoryFilter={setIUCNCategoryFilter}
+        distanceFilter={distanceFilter} // Pasar el valor actual del filtro de distancia
+        setDistanceFilter={setDistanceFilter} // Pas
       />
 
       {/* Mapa */}
