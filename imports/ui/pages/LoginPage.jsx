@@ -6,12 +6,12 @@ const LoginPage = () => {
   const user = useTracker(() => Meteor.user());
 
   if (user) {
-    window.location.href = '/homepage';
+    window.location.href = '/';
   }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Updated hook for navigation
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,10 +19,7 @@ const LoginPage = () => {
       if (error) {
         alert('Error al iniciar sesión: ' + error.reason);
       } else {
-        // Redirige al usuario a la página principal
-        navigate("/homepage"); // Updated to navigate to home page
-
-        // window.location.href = '/homepage';
+        navigate("/");
       }
     });
   };

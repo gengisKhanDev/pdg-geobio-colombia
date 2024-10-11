@@ -17,7 +17,6 @@ const Footer = ({ userRole }) => {
   const handlePublicarClick = () => {
     navigate("/publicar");
   };
-  console.log(userRole);
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white shadow-lg border-t border-gray-300">
       <div className="flex justify-around py-2">

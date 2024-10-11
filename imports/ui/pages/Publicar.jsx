@@ -12,110 +12,147 @@ export function Publicar() {
   }
   return (
     <>
-      <div className="flex justify-center">
-        <Card className="max-w-sm" horizontal>
-          <form className="flex flex-col gap-4">
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="scientificName" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="class" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="latitude" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="longitude" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="Heliconius" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="stateProvince" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="verbatimLocality" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="family" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="remember" />
-              <Label htmlFor="remember">Remember me</Label>
-            </div>
-            <Button
-              className="p-2 bg-blue-600 text-white rounded-full w-full"
-              type="submit"
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
+        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <form>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium"
             >
-              Submit
-            </Button>
-          </form>
-        </Card>
+              Password:
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="w-full px-4 py-2 border rounded"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+          >
+            Login
+          </button>
+        </form>
       </div>
+    </div>
       <Footer userRole={user.profile.role.name} />
     </>
   );

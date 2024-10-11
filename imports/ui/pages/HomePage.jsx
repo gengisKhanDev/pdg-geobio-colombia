@@ -118,7 +118,7 @@ const HomePage = () => {
     stateProvinceFilter,
     iucnCategoryFilter,
     proximityFilter,
-    distanceFilter, // Añadir el filtro de distancia como dependencia
+    distanceFilter,
   ]);
 
   return (

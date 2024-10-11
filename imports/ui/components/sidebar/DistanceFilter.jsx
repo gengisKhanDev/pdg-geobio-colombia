@@ -4,7 +4,7 @@ import React from 'react';
 const DistanceFilter = ({ value, onChange }) => {
   return (
     <div className="mb-4">
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="distance">
+      <label className="block text-black mb-2" htmlFor="distance">
         Distancia (km)
       </label>
       <input
