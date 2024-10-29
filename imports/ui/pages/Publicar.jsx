@@ -1,158 +1,168 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
-import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import Footer from "../components/Footer";
+import { FileInput, Label } from "flowbite-react";
 
 export function Publicar() {
+  const [image, setImage] = useState(null);
   const user = useTracker(() => Meteor.user());
 
   if (!user) {
     return <div>Por favor, inicia sesión para ver tu cuenta.</div>;
   }
+
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const scientificName = e.target.scientificName.value;
+    const classForm = e.target.classForm.value;
+    const lnlg = e.target.lnlg.value;
+    const genericName = e.target.genericName.value;
+    const stateProvince = e.target.stateProvince.value;
+    let verbatimLocality = e.target.verbatimLocality.value;
+    let family = e.target.family.value;
+    const smallFileUpload = image;
+    if(smallFileUpload === null){
+      return alert("por favor añadir una imagen");
+    }
+    if(verbatimLocality === ""){
+      verbatimLocality = "N/A"
+    }
+    if(family === ""){
+      family = "N/A"
+    }
+    Meteor.call("species.publicar", scientificName, classForm, lnlg, genericName, stateProvince, verbatimLocality,
+      family, smallFileUpload, (error, result) => {
+      if(error){
+        console.error("Error fetching species:", error);
+      }
+      else {
+        console.log("Fetched species:", result);
+      }
+    });
+  };
   return (
     <>
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold mb-6">Login</h1>
-        <form>
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>
+      <div className="flex justify-center items-center pb-20 pt-5 bg-gray-100">
+        <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
+          <h1 className="text-2xl font-bold mb-6">Agregar especie</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                htmlFor="scientificName"
+                className="block mb-2 text-sm font-medium"
+              >
+                Nombre cientifico:
+              </label>
+              <input
+                id="scientificName"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="classForm" className="block mb-2 text-sm font-medium">
+                Clase:
+              </label>
+              <input
+                id="classForm"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="lnlg" className="block mb-2 text-sm font-medium">
+                Longitud & latitud:
+              </label>
+              <input
+                id="lnlg"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="genericName"
+                className="block mb-2 text-sm font-medium"
+              >
+                Nombre generico:
+              </label>
+              <input
+                id="genericName"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="stateProvince"
+                className="block mb-2 text-sm font-medium"
+              >
+                Departamento:
+              </label>
+              <input
+                id="stateProvince"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="verbatimLocality"
+                className="block mb-2 text-sm font-medium"
+              >
+                VerbatimLocality (opcional):
+              </label>
+              <input
+                id="verbatimLocality"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="family"
+                className="block mb-2 text-sm font-medium"
+              >
+                Familia (opcional):
+              </label>
+              <input
+                id="family"
+                type="text"
+                className="w-full px-4 py-2 border rounded"
+              />
+            </div>
+            <div className="mb-2">
+              <div>
+                <Label htmlFor="smallFileUpload" value="Small file input" />
+              </div>
+              <FileInput id="smallFileUpload" onChange={handleImageChange} sizing="sm" />
+            </div>
 
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium"
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
             >
-              Password:
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="w-full px-4 py-2 border rounded"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
-          >
-            Login
-          </button>
-        </form>
+              Añadir
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
       <Footer userRole={user.profile.role.name} />
     </>
   );

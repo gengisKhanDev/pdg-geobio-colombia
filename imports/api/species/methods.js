@@ -60,9 +60,24 @@ Meteor.methods({
       status: String,
     });
     console.log(photo)
-    // Species.update(
-    //   { _id: speciesId },
-    //   { $push: { photosUsers: photo } }
-    // );
+    Species.update(
+      { _id: speciesId },
+      { $push: { photosUsers: photo } }
+    );
   },
+  "species.publicar"(scientificName, classForm, lnlg, stateProvince, verbatimLocality,
+    family, smallFileUpload, iucnRedListCategory){
+      Species.insert({
+        scientificName: scientificName,
+        class: classForm,
+        latitude: decimalLatitude,
+        longitude: decimalLongitude,
+        media: smallFileUpload,
+        genericName: genericName,
+        stateProvince: stateProvince,
+        verbatimLocality: verbatimLocality,
+        iucnRedListCategory: iucnRedListCategory,
+        family: family,
+    })
+  }
 });

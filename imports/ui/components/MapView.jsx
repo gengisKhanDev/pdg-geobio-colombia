@@ -4,21 +4,18 @@ import {
   TileLayer,
   Polygon,
   ZoomControl,
+  useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  worldCoords,
-  colombiaCoords,
-  limitColombia,
-} from "./coordenadas.js";
+import { worldCoords, colombiaCoords, limitColombia } from "./coordenadas.js";
 import SpeciesModal from "./mapview/SpeciesModal";
 import MapController from "./mapview/MapController";
 import SpeciesMarker from "./mapview/SpeciesMarker";
 import UserLocationMarker from "./mapview/UserLocationMarker";
 import PolygonLayers from "./mapview/PolygonLayers";
 
-const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
+const MapView = ({ speciesData, userLocation, selectedDepartment, onMapClick, enableClickForCoordinates }) => {
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,9 +33,20 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
 
   const handleModalClose = () => setIsModalOpen(false);
   const handleViewMoreClick = (species) => {
-    console.log("View More clicked for:", species.scientificName);
     setSelectedSpecies(species);
     setIsModalOpen(true);
+  };
+
+
+  const MapClickHandler = () => {
+    useMapEvents({
+      click: (e) => {
+        if (enableClickForCoordinates && onMapClick) {
+          onMapClick(e.latlng);
+        }
+      },
+    });
+    return null;
   };
 
   return (
@@ -67,6 +75,7 @@ const MapView = ({ speciesData, userLocation, selectedDepartment }) => {
             onViewMore={handleViewMoreClick}
           />
         ))}
+        <MapClickHandler />
         <Polygon
           pathOptions={darkOverlayOptions}
           positions={[worldCoords, colombiaCoords]}

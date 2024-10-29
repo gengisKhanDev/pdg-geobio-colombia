@@ -4,7 +4,7 @@ import { Species } from "/imports/api/species/species"; // Asegúrate de que est
 
 const UploadPhoto = ({ speciesId }) => {
   const [image, setImage] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState(""); // Estado para mostrar mensajes
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

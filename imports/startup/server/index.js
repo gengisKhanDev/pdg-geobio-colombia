@@ -11,7 +11,6 @@ Meteor.startup(async () => {
   try {
     const userCount = await Users.find().countAsync();
     if (userCount === 0) {
-      // Crear el usuario administrador
       await Accounts.createUser({
         username: "admin",
         email: "admin@admin.com",
@@ -27,7 +26,6 @@ Meteor.startup(async () => {
         }
       });
 
-      // Crear el usuario de prueba
       await Accounts.createUser({
         username: "user",
         email: "user@user.com",
@@ -46,7 +44,7 @@ Meteor.startup(async () => {
     }
   } catch (error) {
     console.error("Error contando usuarios o creando usuarios:", error);
-    return; // Salir de la función si ocurre un error
+    return;
   }
 
   try {
@@ -76,7 +74,6 @@ Meteor.startup(async () => {
         }
       ];
 
-      // Insertar los roles en la configuración
       await Settings.insertAsync({
         _id: "roles",
         roles: rolesArr

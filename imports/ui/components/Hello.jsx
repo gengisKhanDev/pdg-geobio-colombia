@@ -14,7 +14,7 @@ export const Hello = () => {
       }
       else {
         console.log("Fetched species:", result);
-        setSpeciesData(result); // Guardar los datos en el estado para mostrar
+        setSpeciesData(result);
       }
     });
   };
