@@ -1,0 +1,6 @@
+{
+  "public": {
+    "forbidClientAccountCreation": false,
+    "sendVerificationEmail": false
+  }
+}

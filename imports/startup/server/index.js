@@ -1,11 +1,17 @@
 import "../../api/species/server/publications.js";
 import "../../api/species/methods.js";
+import "../../api/users/server/publications.js";
+import "../../api/users/methods.js";
 import { Random } from "meteor/random";
+import { Accounts } from "meteor/accounts-base";
 
 import { Users } from "../../api/users/users.js";
 import { Settings } from "../../api/settings/settings.js";
 
 Meteor.startup(async () => {
+  Accounts.config({
+    forbidClientAccountCreation: false
+  });
   let adminRole = Random.id();
   let userRole = Random.id();
   try {

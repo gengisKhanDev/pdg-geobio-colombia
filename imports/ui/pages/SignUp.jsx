@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Updated to useNavigate
 import { useTracker } from 'meteor/react-meteor-data';
+import { Settings } from "../../api/settings/settings.js";
 
-const LoginPage = () => {
+const SignUp = () => {
   const user = useTracker(() => Meteor.user());
 
   if (user) {
@@ -13,13 +14,16 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    Meteor.loginWithPassword(email, password, (error) => {
-      if (error) {
-        alert('Error al iniciar sesión: ' + error.reason);
-      } else {
-        navigate("/");
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    Meteor.call("users.signup", email, password, (error, result) => {
+      if(error){
+        console.error("Error fetching species:", error);
+      }
+      else {
+        console.log("Fetched species:", result);
       }
     });
   };
@@ -27,7 +31,7 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <h1 className="text-2xl font-bold mb-6">Signup</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2 text-sm font-medium">
@@ -66,12 +70,10 @@ const LoginPage = () => {
           >
             Login
           </button>
-          <hr />
-          <a href="/signup"><h3>SignUp</h3></a>
         </form>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignUp;
