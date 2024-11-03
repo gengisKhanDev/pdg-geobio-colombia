@@ -4,6 +4,11 @@ import L from "leaflet";
 import { Button } from "flowbite-react";
 
 const SpeciesMarker = ({ species, onViewMore }) => {
+  // Excluir especies que tengan status "pending"
+  if (species.status === "pending") {
+    return null;
+  }
+
   return (
     <Marker
       key={species._id}
@@ -16,10 +21,10 @@ const SpeciesMarker = ({ species, onViewMore }) => {
                   }" class="w-12 h-12 object-cover"/>
           </div>
         `,
-        className: "", // Para eliminar estilos por defecto
-        iconSize: [48, 48], // Tamaño del icono
-        iconAnchor: [24, 48], // Ancla del icono
-        popupAnchor: [0, -48], // Ancla del popup
+        className: "",
+        iconSize: [48, 48],
+        iconAnchor: [24, 48],
+        popupAnchor: [0, -48],
       })}
     >
       <Popup>
@@ -39,22 +44,24 @@ const SpeciesMarker = ({ species, onViewMore }) => {
             </span>
             <br />
             <span className="text-sm text-gray-600">
-              Location: {species.verbatimLocality}, {species.stateProvince}
+              Location: {species.verbatimLocality || "N/A"}, {species.stateProvince}
             </span>
           </div>
           <div className="mt-2 text-center">
             <span className="text-xs text-gray-500">
-              Photo by: {species.media?.creator}
+              Photo by: {typeof species.media?.creator === "object" ? species.media.creator.name : species.media?.creator}
             </span>
             <br />
-            <a
-              href={species.media?.references}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 underline text-sm"
-            >
-              View on iNaturalist
-            </a>
+            {species.media?.references && (
+              <a
+                href={species.media.references}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline text-sm"
+              >
+                View on iNaturalist
+              </a>
+            )}
           </div>
           <div className="mt-4 text-center">
             <Button

@@ -2,3 +2,32 @@ body {
   padding: 0px;
   font-family: sans-serif;
 }
+
+.custom-alert {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0; /* Empieza invisible para animación */
+}
+
+.custom-alert.success { background-color: #4CAF50; }
+.custom-alert.error { background-color: #f44336; }
+.custom-alert.warning { background-color: #ff9800; }
+.custom-alert.info { background-color: #2196F3; }
+
+.close-btn {
+  margin-left: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 20px;
+}

@@ -36,7 +36,7 @@ const Footer = ({ userRole }) => {
         </button>
         <button className="flex flex-col items-center text-gray-700 hover:text-black w-full">
           <HiHome size={28} />
-          <span className="text-xs">Inicio</span>
+          <span className="text-xs">Dashboard</span>
         </button>
         {/* Botón adicional para usuarios con rol de "admin" */}
         {userRole === "Admin" && (

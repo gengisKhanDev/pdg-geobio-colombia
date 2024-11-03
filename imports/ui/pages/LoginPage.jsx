@@ -27,11 +27,11 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <h1 className="text-2xl font-bold mb-6">Iniciar sesión</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Email:
+              Correo Electrónico:
             </label>
             <input
               id="email"
@@ -48,7 +48,7 @@ const LoginPage = () => {
               htmlFor="password"
               className="block mb-2 text-sm font-medium"
             >
-              Password:
+              Contraseña:
             </label>
             <input
               id="password"
@@ -64,10 +64,10 @@ const LoginPage = () => {
             type="submit"
             className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
           >
-            Login
+            Iniciar sesión
           </button>
           <hr />
-          <a href="/signup"><h3>SignUp</h3></a>
+          <a href="/signup"><h3>Registrarse</h3></a>
         </form>
       </div>
     </div>

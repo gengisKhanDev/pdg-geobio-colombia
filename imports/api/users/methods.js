@@ -4,11 +4,14 @@ import { Settings } from "../settings/settings.js";
 import { Users } from "../users/users.js";
 
 Meteor.methods({
-  async "users.signup"(email, password) {
+  async "users.signup"(firstName, lastName, email, password, rol) {
     this.unblock();
 
+    check(firstName, String);
+    check(lastName, String);
     check(email, String);
     check(password, String);
+    check(rol, String);
 
     const emailExists = await Users.findOneAsync({ "emails.address": email });
     if (emailExists) {
@@ -20,7 +23,8 @@ Meteor.methods({
       const rolesData = await Settings.findOneAsync({ _id: "roles" });
       const rolesArray = rolesData.roles;
 
-      const adminRole = rolesArray.find(role => role.name === "Admin");
+      const adminRole = rolesArray.find(role => role.name === rol);
+
       if (adminRole) {
         roleObj = {
           id: adminRole.id,
@@ -32,8 +36,8 @@ Meteor.methods({
         email: email,
         password: password,
         profile: {
-          firstName: "Super",
-          lastName: "Admin",
+          firstName: firstName,
+          lastName: lastName,
           role: roleObj
         }
       });

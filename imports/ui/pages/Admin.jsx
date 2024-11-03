@@ -28,7 +28,17 @@ const Admin = () => {
   };
 
   if (!user) {
-    return <div>Por favor, inicia sesión para ver tu cuenta.</div>;
+    return (
+      <div>
+        Por favor, inicia sesión para ver tu cuenta.
+        <a
+          href="/login"
+          className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+        >
+          Ir al Login
+        </a>
+      </div>
+    );
   }
   return (
     <>
@@ -37,10 +47,10 @@ const Admin = () => {
           className="px-4 py-2 bg-blue-600 text-white rounded-lg"
           onClick={handleClick}
         >
-          Click to Fetch
+          Click para agregar especies
         </button>
         <div>
-          <h2>Species Data:</h2>
+          <h2>Especies Datos:</h2>
           <pre>{JSON.stringify(speciesData, null, 2)}</pre>
         </div>
       </div>

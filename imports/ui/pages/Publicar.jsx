@@ -3,15 +3,27 @@ import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import Footer from "../components/Footer";
 import { FileInput, Label } from "flowbite-react";
+import { customAlert } from "../../startup/client/custom-alert.js";
 
 export function Publicar() {
   const [image, setImage] = useState(null);
+  const [iucnRedListCategory, setIucnRedListCategory] = useState("");
+  const [departamentos, setDepartamentos] = useState("");
   const user = useTracker(() => Meteor.user());
 
   if (!user) {
-    return <div>Por favor, inicia sesión para ver tu cuenta.</div>;
+    return (
+      <div>
+        Por favor, inicia sesión para ver tu cuenta.
+        <a
+          href="/login"
+          className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+        >
+          Ir al Login
+        </a>
+      </div>
+    );
   }
-
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -31,25 +43,41 @@ export function Publicar() {
     const stateProvince = e.target.stateProvince.value;
     let verbatimLocality = e.target.verbatimLocality.value;
     let family = e.target.family.value;
+    console.log(image);
     const smallFileUpload = image;
-    if(smallFileUpload === null){
-      return alert("por favor añadir una imagen");
+    if (smallFileUpload === null) {
+      return customAlert("success", "Your action was successful!", 2000);
     }
-    if(verbatimLocality === ""){
-      verbatimLocality = "N/A"
+    if (verbatimLocality === "") {
+      verbatimLocality = "N/A";
     }
-    if(family === ""){
-      family = "N/A"
+    if (family === "") {
+      family = "N/A";
     }
-    Meteor.call("species.publicar", scientificName, classForm, lnlg, genericName, stateProvince, verbatimLocality,
-      family, smallFileUpload, (error, result) => {
-      if(error){
-        console.error("Error fetching species:", error);
+    const [latitudeStr, longitudeStr] = lnlg.split(",");
+    const latitude = parseFloat(latitudeStr.trim());
+    const longitude = parseFloat(longitudeStr.trim());
+
+    Meteor.call(
+      "species.publicar",
+      scientificName,
+      classForm,
+      latitude,
+      longitude,
+      genericName,
+      stateProvince,
+      iucnRedListCategory,
+      verbatimLocality,
+      family,
+      smallFileUpload,
+      (error, result) => {
+        if (error) {
+          console.error("Error fetching species:", error);
+        } else {
+          console.log("Fetched species:", result);
+        }
       }
-      else {
-        console.log("Fetched species:", result);
-      }
-    });
+    );
   };
   return (
     <>
@@ -62,7 +90,7 @@ export function Publicar() {
                 htmlFor="scientificName"
                 className="block mb-2 text-sm font-medium"
               >
-                Nombre cientifico:
+                Nombre científico:
               </label>
               <input
                 id="scientificName"
@@ -72,7 +100,10 @@ export function Publicar() {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="classForm" className="block mb-2 text-sm font-medium">
+              <label
+                htmlFor="classForm"
+                className="block mb-2 text-sm font-medium"
+              >
                 Clase:
               </label>
               <input
@@ -84,7 +115,7 @@ export function Publicar() {
             </div>
             <div className="mb-4">
               <label htmlFor="lnlg" className="block mb-2 text-sm font-medium">
-                Longitud & latitud:
+                Longitud & Latitud (pegar coordenadas):
               </label>
               <input
                 id="lnlg"
@@ -98,7 +129,7 @@ export function Publicar() {
                 htmlFor="genericName"
                 className="block mb-2 text-sm font-medium"
               >
-                Nombre generico:
+                Nombre genérico:
               </label>
               <input
                 id="genericName"
@@ -114,19 +145,48 @@ export function Publicar() {
               >
                 Departamento:
               </label>
-              <input
+              <select
                 id="stateProvince"
-                type="text"
-                className="w-full px-4 py-2 border rounded"
+                value={departamentos}
+                onChange={(e) => setDepartamentos(e.target.value)}
+                className="text-black bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
-              />
+              >
+                <option value="Chocó">Chocó</option>
+                <option value="Valle del Cauca">Valle del Cauca</option>
+                <option value="Cauca">Cauca</option>
+                <option value="Nariño">Nariño</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="iucnCategory"
+                className="block mb-2 text-sm font-medium"
+              >
+                Categorías de la Lista Roja (opcional):
+              </label>
+              <select
+                id="iucnCategory"
+                value={iucnRedListCategory}
+                onChange={(e) => setIucnRedListCategory(e.target.value)}
+                className="text-black bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="n/a">Seleccionar opción</option>
+                <option value="CR">En Peligro Crítico (CR)</option>
+                <option value="EN">En Peligro (EN)</option>
+                <option value="VU">Vulnerable (VU)</option>
+                <option value="NT">Casi Amenazada (NT)</option>
+                <option value="LC">Preocupación Menor (LC)</option>
+                <option value="DD">Datos Insuficientes (DD)</option>
+                <option value="NE">No Evaluada (NE)</option>
+              </select>
             </div>
             <div className="mb-4">
               <label
                 htmlFor="verbatimLocality"
                 className="block mb-2 text-sm font-medium"
               >
-                VerbatimLocality (opcional):
+                Ubicación exacta en texto (opcional):
               </label>
               <input
                 id="verbatimLocality"
@@ -149,9 +209,16 @@ export function Publicar() {
             </div>
             <div className="mb-2">
               <div>
-                <Label htmlFor="smallFileUpload" value="Small file input" />
+                <Label
+                  htmlFor="smallFileUpload"
+                  value="Agregar imagen de la especie:"
+                />
               </div>
-              <FileInput id="smallFileUpload" onChange={handleImageChange} sizing="sm" />
+              <FileInput
+                id="smallFileUpload"
+                onChange={handleImageChange}
+                sizing="sm"
+              />
             </div>
 
             <button

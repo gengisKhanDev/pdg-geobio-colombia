@@ -39,7 +39,7 @@ export function FilterCard({
       <div className="flex items-center space-x-2">
         <HiMenu size={24} className="cursor-pointer mr-4" onClick={onOpen} />
         <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-black">
-          Filter Options
+          Filtros
         </h5>
       </div>
       <ScientificNameFilter

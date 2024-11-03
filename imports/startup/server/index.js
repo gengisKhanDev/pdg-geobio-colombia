@@ -2,6 +2,8 @@ import "../../api/species/server/publications.js";
 import "../../api/species/methods.js";
 import "../../api/users/server/publications.js";
 import "../../api/users/methods.js";
+import "./created-by.js";
+
 import { Random } from "meteor/random";
 import { Accounts } from "meteor/accounts-base";
 

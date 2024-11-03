@@ -61,7 +61,7 @@ const FilterSidebar = forwardRef(
           <Sidebar.Items>
             <Sidebar.ItemGroup>
               <Sidebar.Item icon={HiAdjustments}>
-                <h2 className="text-lg font-bold mb-4">Filters</h2>
+                <h2 className="text-lg font-bold mb-4">Filtros</h2>
               </Sidebar.Item>
 
               <Sidebar.Item icon={HiFilter}>
@@ -102,7 +102,7 @@ const FilterSidebar = forwardRef(
                 className="p-2 bg-blue-600 text-white rounded mt-4"
                 onClick={handleLoginClick}
               >
-                {user ? "My Account" : "Login"}
+                {user ? "Mi Cuenta" : "Iniciar Sesión"}
               </button>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
