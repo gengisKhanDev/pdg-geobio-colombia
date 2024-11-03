@@ -60,10 +60,15 @@ Meteor.methods({
       uploadedBy: String,
       status: String,
     });
-    console.log(photo)
+    const createdByUser = await createdBy.getUser(photo.uploadedBy);
+
     await Species.updateAsync(
       { _id: speciesId },
-      { $push: { photosUsers: photo } }
+      { $push: { photosUsers: {
+        image: photo.image,
+        createdby: createdByUser,
+        status: photo.status
+      } } }
     );
   },
   async "species.publicar"(scientificName, classForm, latitude, longitude, genericName, stateProvince, iucnRedListCategory, verbatimLocality,
@@ -92,7 +97,6 @@ Meteor.methods({
   async "species.statusChange"(id, decision, note) {
     check(id, String);
     check(decision, String);
-    console.log(decision)
     let status = ""
     if (decision == "accepted") {
       status = "accepted"
@@ -110,4 +114,28 @@ Meteor.methods({
       } }
     );
   },
+  async "species.photoStatusChange"(speciesId, photoIndex, newStatus) {
+    check(speciesId, String);
+    check(photoIndex, Number);
+    check(newStatus, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+
+    // Asegúrate de que el estado es 'accepted' o 'rejected'
+    if (!["accepted", "rejected"].includes(newStatus)) {
+      throw new Meteor.Error("invalid-status", "El estado debe ser 'accepted' o 'rejected'");
+    }
+
+    // Actualiza el estado de la foto específica en el array photosUsers
+    const updateResult = await Species.updateAsync(
+      { _id: speciesId, [`photosUsers.${photoIndex}.status`]: "pending" }, // Verifica que esté en "pending"
+      { $set: { [`photosUsers.${photoIndex}.status`]: newStatus } }
+    );
+
+    if (updateResult === 0) {
+      throw new Meteor.Error("update-failed", "No se pudo actualizar el estado de la foto");
+    }
+  }
 });

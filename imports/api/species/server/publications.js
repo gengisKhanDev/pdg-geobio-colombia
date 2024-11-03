@@ -16,3 +16,10 @@ Meteor.publish('species.mySpecies', function () {
 
   return Species.find({ "createdBy.id": this.userId });
 });
+
+Meteor.publish("species.photosPending", function () {
+  return Species.find(
+    { "photosUsers.status": "pending" },
+    { fields: { scientificName: 1, photosUsers: 1 } }
+  );
+});

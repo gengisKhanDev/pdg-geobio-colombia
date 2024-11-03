@@ -44,7 +44,6 @@ export function Publicar() {
     const stateProvince = e.target.stateProvince.value;
     let verbatimLocality = e.target.verbatimLocality.value;
     let family = e.target.family.value;
-    console.log(image);
     const smallFileUpload = image;
     if (smallFileUpload === null) {
       return customAlert("success", "Your action was successful!", 2000);
@@ -248,6 +247,7 @@ export function Publicar() {
                 id="smallFileUpload"
                 onChange={handleImageChange}
                 sizing="sm"
+                accept="image/*" // Acepta solo archivos de imagen
               />
             </div>
 

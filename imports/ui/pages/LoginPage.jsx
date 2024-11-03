@@ -68,6 +68,8 @@ const LoginPage = () => {
           </button>
           <hr />
           <a href="/signup"><h3>Registrarse</h3></a>
+          <hr />
+          <a href="/"><h3>Inicio</h3></a>
         </form>
       </div>
     </div>

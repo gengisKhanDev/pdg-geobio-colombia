@@ -21,9 +21,6 @@ const RequestsSection = ({ pendingSpecies }) => {
       }
     });
 
-    console.log(decision); // accepted o rejected
-    console.log(id); // accepted o rejected
-    console.log("Nota del administrador:", note);
     setSelectedSpecies(null); // Cierra el modal
     setNote(""); // Limpia el área de nota
   };

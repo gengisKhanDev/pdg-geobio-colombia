@@ -11,10 +11,10 @@ export function customAlert(type = "info", text = "Something went wrong...", tim
   alertContainer.id = "customAlert";
 
   // Crear el botón de cierre
-  const closeButton = document.createElement("span");
-  closeButton.className = "close-btn";
-  closeButton.innerHTML = "&times;";
-  closeButton.onclick = () => alertContainer.style.display = "none";
+  // const closeButton = document.createElement("span");
+  // closeButton.className = "close-btn";
+  // closeButton.innerHTML = "&times;";
+  // closeButton.onclick = () => alertContainer.style.display = "none";
 
   // Crear el contenedor del mensaje
   const customDiv = document.createElement("div");
@@ -28,7 +28,7 @@ export function customAlert(type = "info", text = "Something went wrong...", tim
 
   // Agregar los elementos al contenedor de alerta
   customDiv.appendChild(messageText);
-  alertContainer.appendChild(closeButton);
+  // alertContainer.appendChild(closeButton);
   alertContainer.appendChild(customDiv);
 
   // Agregar la alerta al inicio del body

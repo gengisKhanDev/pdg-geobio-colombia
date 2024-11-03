@@ -135,6 +135,8 @@ const SignUp = () => {
           </button>
           <hr />
           <a href="/login"><h3>Ir a Iniciar Sesión</h3></a>
+          <hr />
+          <a href="/"><h3>Inicio</h3></a>
         </form>
       </div>
     </div>

@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import UploadPhoto from "./UploadPhoto";
-import { Modal, Button } from "flowbite-react"; // Asegúrate de tener el componente de Flowbite
+import { Modal, Button } from "flowbite-react";
 
 const SpeciesModal = ({ species, onClose }) => {
-  const user = Meteor.user(); // Obtener el usuario autenticado
+  const user = Meteor.user();
+
+  // Filtra las fotos con estado "accepted"
+  const acceptedPhotos = species.photosUsers?.filter(photo => photo.status === "accepted");
+
+  const handleUploadSuccess = () => {
+    onClose(); // Cierra el modal después de subir una foto con éxito
+  };
 
   return (
     <Modal className="modal-bg" show={!!species} onClose={onClose} size="lg">
@@ -11,11 +18,35 @@ const SpeciesModal = ({ species, onClose }) => {
       <Modal.Body>
         <p>Familia: {species?.family}</p>
         <p>Ubicación: {species?.verbatimLocality}</p>
-        {/* Mostrar la opción de subir foto solo si el usuario está autenticado */}
+
+        {/* Mostrar fotos aceptadas */}
+        {acceptedPhotos && acceptedPhotos.length > 0 ? (
+          <div className="mt-4">
+            <h3 className="text-lg font-bold">Fotos Aceptadas</h3>
+            <div className="grid grid-cols-1 gap-4 mt-2">
+              {acceptedPhotos.map((photo, index) => (
+                <div key={index} className="text-center">
+                  <img
+                    src={photo.image}
+                    alt={`Foto ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                  <p className="text-sm text-gray-600 mt-1">
+                    Subida por: {photo.createdby?.name || "Usuario desconocido"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500 mt-4">No hay fotos aceptadas para esta especie.</p>
+        )}
+
+        {/* Opciones de subir foto para usuarios autenticados */}
         {user ? (
-          <div>
+          <div className="mt-4">
             <h3 className="text-lg font-bold">Subir una foto</h3>
-            <UploadPhoto speciesId={species._id} />
+            <UploadPhoto speciesId={species._id} onSuccess={handleUploadSuccess} />
           </div>
         ) : (
           <p>Inicia sesión para subir una foto.</p>
