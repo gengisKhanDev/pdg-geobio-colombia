@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import Footer from "../components/Footer";
-import { FileInput, Label } from "flowbite-react";
+import { HiQuestionMarkCircle } from "react-icons/hi";
+import { FileInput, Label, Tooltip } from "flowbite-react";
 import { customAlert } from "../../startup/client/custom-alert.js";
 
 export function Publicar() {
@@ -88,9 +89,12 @@ export function Publicar() {
             <div className="mb-4">
               <label
                 htmlFor="scientificName"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Nombre científico:
+                Nombre científico
+                <Tooltip content="Introduce el nombre científico de la especie, ejm: Icterus chrysater (Lesson, 1844)">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <input
                 id="scientificName"
@@ -102,9 +106,12 @@ export function Publicar() {
             <div className="mb-4">
               <label
                 htmlFor="classForm"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Clase:
+                Clase
+                <Tooltip content="Introduce la clase taxonómica de la especie, ejm: Aves">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <input
                 id="classForm"
@@ -114,8 +121,14 @@ export function Publicar() {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="lnlg" className="block mb-2 text-sm font-medium">
-                Longitud & Latitud (pegar coordenadas):
+              <label
+                htmlFor="lnlg"
+                className="flex items-center mb-2 text-sm font-medium"
+              >
+                Longitud & Latitud (pegar coordenadas)
+                <Tooltip content="Introduce las coordenadas en formato latitud, longitud, ejm: 2.993965, -76.784989">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <input
                 id="lnlg"
@@ -127,9 +140,12 @@ export function Publicar() {
             <div className="mb-4">
               <label
                 htmlFor="genericName"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Nombre genérico:
+                Nombre genérico
+                <Tooltip content="Introduce el nombre común de la especie, ejm: Icterus">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <input
                 id="genericName"
@@ -141,9 +157,12 @@ export function Publicar() {
             <div className="mb-4">
               <label
                 htmlFor="stateProvince"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Departamento:
+                Departamento
+                <Tooltip content="Selecciona el departamento donde se encontró la especie">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <select
                 id="stateProvince"
@@ -161,9 +180,12 @@ export function Publicar() {
             <div className="mb-4">
               <label
                 htmlFor="iucnCategory"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Categorías de la Lista Roja (opcional):
+                Categorías de la Lista Roja (opcional)
+                <Tooltip content="Selecciona el estado de conservación según la Lista Roja de la UICN">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <select
                 id="iucnCategory"
@@ -184,27 +206,35 @@ export function Publicar() {
             <div className="mb-4">
               <label
                 htmlFor="verbatimLocality"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Ubicación exacta en texto (opcional):
+                Ubicación exacta en texto
+                <Tooltip content="Proporciona una descripción textual de la ubicación, como nombre de ciudad o sitio específico, ejm: Puelenje, Popayán, Cauca, CO">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <input
                 id="verbatimLocality"
                 type="text"
                 className="w-full px-4 py-2 border rounded"
+                required
               />
             </div>
             <div className="mb-4">
               <label
                 htmlFor="family"
-                className="block mb-2 text-sm font-medium"
+                className="flex items-center mb-2 text-sm font-medium"
               >
-                Familia (opcional):
+                Familia
+                <Tooltip content="Especifica la familia taxonómica de la especie ejm: Icteridae.">
+                  <HiQuestionMarkCircle className="ml-1 text-gray-500 cursor-pointer" />
+                </Tooltip>
               </label>
               <input
                 id="family"
                 type="text"
                 className="w-full px-4 py-2 border rounded"
+                required
               />
             </div>
             <div className="mb-2">

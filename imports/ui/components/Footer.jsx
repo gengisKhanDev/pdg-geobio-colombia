@@ -17,6 +17,11 @@ const Footer = ({ userRole }) => {
   const handlePublicarClick = () => {
     navigate("/publicar");
   };
+
+  const handleDashboardClick = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white shadow-lg border-t border-gray-300">
       <div className="flex justify-around py-2">
@@ -34,11 +39,13 @@ const Footer = ({ userRole }) => {
           <HiPlusCircle size={28} />
           <span className="text-xs">Publicar</span>
         </button>
-        <button className="flex flex-col items-center text-gray-700 hover:text-black w-full">
+        <button
+          onClick={handleDashboardClick}
+          className="flex flex-col items-center text-gray-700 hover:text-black w-full"
+        >
           <HiHome size={28} />
           <span className="text-xs">Dashboard</span>
         </button>
-        {/* Botón adicional para usuarios con rol de "admin" */}
         {userRole === "Admin" && (
           <button
             onClick={handleAdminClick}

@@ -6,6 +6,7 @@ import { Test } from "../../ui/pages/test.jsx";
 import LoginPage from "../../ui/pages/LoginPage.jsx";  // Import the new login page
 import SignUp from "../../ui/pages/SignUp.jsx";  // Import the new login page
 import MyAccount from "../../ui/pages/MyAccount.jsx";
+import Dashboard from "../../ui/pages/Dashboard.jsx";
 import Admin from "../../ui/pages/Admin.jsx";
 import { Publicar } from "../../ui/pages/Publicar.jsx";
 
@@ -18,6 +19,7 @@ export const AppRoutes = () => (
       <Route path="/login" element={<LoginPage />} />
       <Route path="/SignUp" element={<SignUp />} />
       <Route path="/myaccount" element={<MyAccount />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/admin" element={<Admin />} />
     </Routes>
   </Router>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Updated to useNavigate
+import { useNavigate } from "react-router-dom";
 import { useTracker } from "meteor/react-meteor-data";
-import { Settings } from "../../api/settings/settings.js";
 
 const SignUp = () => {
   const user = useTracker(() => Meteor.user());

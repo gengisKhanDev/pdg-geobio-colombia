@@ -5,7 +5,7 @@ import { Button } from "flowbite-react";
 
 const SpeciesMarker = ({ species, onViewMore }) => {
   // Excluir especies que tengan status "pending"
-  if (species.status === "pending") {
+  if (species.status === "pending" || species.status === "rejected") {
     return null;
   }
 

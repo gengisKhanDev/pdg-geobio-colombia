@@ -53,7 +53,7 @@ Meteor.methods({
       throw new Meteor.Error("GBIF API request failed", error.message);
     }
   },
-  "species.addPhoto"(speciesId, photo) {
+  async "species.addPhoto"(speciesId, photo) {
     check(speciesId, String);
     check(photo, {
       image: String,
@@ -61,7 +61,7 @@ Meteor.methods({
       status: String,
     });
     console.log(photo)
-    Species.update(
+    await Species.updateAsync(
       { _id: speciesId },
       { $push: { photosUsers: photo } }
     );
@@ -88,5 +88,26 @@ Meteor.methods({
       createdBy: createdByUser,
       createdAt: new Date()
     })
-  }
+  },
+  async "species.statusChange"(id, decision, note) {
+    check(id, String);
+    check(decision, String);
+    console.log(decision)
+    let status = ""
+    if (decision == "accepted") {
+      status = "accepted"
+    } else if (decision == "rejected") {
+      status = "rejected"
+    } else {
+      throw new Meteor.Error("error al procesar solicitud de cambio de status");
+    }
+
+    await Species.updateAsync(
+      { _id: id },
+      { $set: {
+        status: status,
+        note: note
+      } }
+    );
+  },
 });
