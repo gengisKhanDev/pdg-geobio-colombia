@@ -45,8 +45,19 @@ export function Publicar() {
     let verbatimLocality = e.target.verbatimLocality.value;
     let family = e.target.family.value;
     const smallFileUpload = image;
+
+    const coordinatesPattern = /^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/;
+
+    if (!coordinatesPattern.test(lnlg)) {
+      customAlert(
+        "error",
+        "Las coordenadas deben ser números separados por una coma, sin caracteres alfabéticos o especiales.",
+        2000
+      );
+      return;
+    }
     if (smallFileUpload === null) {
-      return customAlert("success", "Your action was successful!", 2000);
+      return customAlert("error", "Agrega una imágen por favor!", 2000);
     }
     if (verbatimLocality === "") {
       verbatimLocality = "N/A";
@@ -74,7 +85,15 @@ export function Publicar() {
         if (error) {
           console.error("Error fetching species:", error);
         } else {
-          console.log("Fetched species:", result);
+          customAlert(
+            "success",
+            "Solicitud para agregar especie enviada, espere la aprobación",
+            3000
+          );
+          setImage(null);
+          e.target.reset();
+          setIucnRedListCategory("");
+          setDepartamentos("");
         }
       }
     );

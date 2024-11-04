@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Updated to useNavigate
 import { useTracker } from 'meteor/react-meteor-data';
+import { customAlert } from "../../startup/client/custom-alert.js";
 
 const LoginPage = () => {
   const user = useTracker(() => Meteor.user());
@@ -19,6 +20,7 @@ const LoginPage = () => {
       if (error) {
         alert('Error al iniciar sesión: ' + error.reason);
       } else {
+        customAlert("success", "Usuario ingresado!", 2000);
         navigate("/");
       }
     });

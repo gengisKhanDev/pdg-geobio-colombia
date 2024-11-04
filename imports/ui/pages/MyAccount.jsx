@@ -39,10 +39,6 @@ const MyAccount = () => {
             {email}
           </p>
           <p>
-            <span className="font-medium">Correo Verificado: </span>
-            {verified}
-          </p>
-          <p>
             <span className="font-medium">Rol: </span>
             {role.name}
           </p>

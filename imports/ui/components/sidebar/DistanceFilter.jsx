@@ -5,7 +5,7 @@ const DistanceFilter = ({ value, onChange }) => {
   return (
     <div className="mb-4">
       <label className="block text-black mb-2" htmlFor="distance">
-        Distancia (km)
+        Distancia (km):
       </label>
       <input
         id="distance"

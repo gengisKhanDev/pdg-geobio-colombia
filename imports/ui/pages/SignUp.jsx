@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTracker } from "meteor/react-meteor-data";
+import { customAlert } from "../../startup/client/custom-alert.js";
 
 const SignUp = () => {
   const user = useTracker(() => Meteor.user());
@@ -32,6 +33,7 @@ const SignUp = () => {
         if (error) {
           console.error("Error fetching species:", error);
         } else {
+          customAlert("success", "Usuario creado, inicia sesión!", 2000);
           navigate("/login");
         }
       }
