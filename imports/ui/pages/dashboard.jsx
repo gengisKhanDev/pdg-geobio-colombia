@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 
 const Dashboard = () => {
   const user = useTracker(() => Meteor.user());
-  const isAdmin = user?.profile?.role?.name === "Admin";
+  const isAdmin = user?.profile?.role?.name === "Admin" || "Super Admin";
 
   const pendingSpecies = useTracker(() => {
     if (isAdmin) {

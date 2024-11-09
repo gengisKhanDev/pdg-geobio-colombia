@@ -18,9 +18,9 @@ const LoginPage = () => {
     e.preventDefault();
     Meteor.loginWithPassword(email, password, (error) => {
       if (error) {
-        alert('Error al iniciar sesión: ' + error.reason);
+        customAlert("error",'Email o contraseña incorrectas:');
       } else {
-        customAlert("success", "Usuario ingresado!", 2000);
+        customAlert("success", "Usuario ingresado!", 3000);
         navigate("/");
       }
     });

@@ -68,7 +68,7 @@ const SpeciesMarker = ({ species, onViewMore }) => {
               onClick={() => onViewMore(species)}
               className="p-2 bg-blue-600 text-white rounded-full w-full"
             >
-              View More
+              Ver más
             </Button>
           </div>
         </div>

@@ -31,9 +31,17 @@ const SignUp = () => {
       role,
       (error, result) => {
         if (error) {
-          console.error("Error fetching species:", error);
+          if (error.reason) {
+            customAlert("error", error.reason, 3000);
+          } else {
+            customAlert(
+              "error",
+              "Error al crear usuario: " + error.message,
+              3000
+            );
+          }
         } else {
-          customAlert("success", "Usuario creado, inicia sesión!", 2000);
+          customAlert("success", "Usuario creado, inicia sesión!", 3000);
           navigate("/login");
         }
       }
@@ -136,9 +144,13 @@ const SignUp = () => {
             Iniciar Sesión
           </button>
           <hr />
-          <a href="/login"><h3>Ir a Iniciar Sesión</h3></a>
+          <a href="/login">
+            <h3>Ir a Iniciar Sesión</h3>
+          </a>
           <hr />
-          <a href="/"><h3>Inicio</h3></a>
+          <a href="/">
+            <h3>Inicio</h3>
+          </a>
         </form>
       </div>
     </div>

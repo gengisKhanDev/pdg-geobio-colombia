@@ -15,9 +15,9 @@ const RequestsSection = ({ pendingSpecies }) => {
 
     Meteor.call("species.statusChange", id, decision, note, (error) => {
       if (error) {
-        customAlert("error", "No se pudo cambiar el status!", 2000)
+        customAlert("error", "No se pudo cambiar el status!", 3000)
       } else {
-        customAlert("success", "Acción fue exitosa!", 2000)
+        customAlert("success", "Acción fue exitosa!", 3000)
       }
     });
 

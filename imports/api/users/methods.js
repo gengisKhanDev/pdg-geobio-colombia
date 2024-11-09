@@ -48,5 +48,11 @@ Meteor.methods({
       console.error("Error al crear usuario:", error);
       throw new Meteor.Error("signup-failed", "Error al crear usuario: " + error.reason || error.message);
     }
+  },
+  async "users.deteleteUser"(id) {
+    this.unblock();
+
+    await Users.removeAsync({ _id: id  });
+
   }
 });

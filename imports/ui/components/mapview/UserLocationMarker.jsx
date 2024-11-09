@@ -13,7 +13,7 @@ const UserLocationMarker = ({ userLocation }) => {
         popupAnchor: [0, -20],
       })}
     >
-      <Popup>You are here</Popup>
+      <Popup>Tú estás aquí</Popup>
     </Marker>
   );
 };

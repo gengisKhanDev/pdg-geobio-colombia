@@ -46,7 +46,7 @@ const Footer = ({ userRole }) => {
           <HiHome size={28} />
           <span className="text-xs">Dashboard</span>
         </button>
-        {userRole === "Admin" && (
+        {userRole === "Super Admin" && (
           <button
             onClick={handleAdminClick}
             className="flex flex-col items-center text-gray-700 hover:text-black w-full"

@@ -52,12 +52,12 @@ export function Publicar() {
       customAlert(
         "error",
         "Las coordenadas deben ser números separados por una coma, sin caracteres alfabéticos o especiales.",
-        2000
+        3000
       );
       return;
     }
     if (smallFileUpload === null) {
-      return customAlert("error", "Agrega una imágen por favor!", 2000);
+      return customAlert("error", "Agrega una imágen por favor!", 3000);
     }
     if (verbatimLocality === "") {
       verbatimLocality = "N/A";

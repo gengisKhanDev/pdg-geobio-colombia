@@ -53,6 +53,12 @@ Meteor.methods({
       throw new Meteor.Error("GBIF API request failed", error.message);
     }
   },
+  async "species.fetchFromGBIFDelete"() {
+    this.unblock();
+
+    await Species.dropCollectionAsync();
+
+  },
   async "species.addPhoto"(speciesId, photo) {
     check(speciesId, String);
     check(photo, {

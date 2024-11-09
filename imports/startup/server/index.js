@@ -29,7 +29,7 @@ Meteor.startup(async () => {
           lastName: "Admin",
           role: {
             id: adminRole,
-            name: "Admin"
+            name: "Super Admin"
           }
         }
       });
