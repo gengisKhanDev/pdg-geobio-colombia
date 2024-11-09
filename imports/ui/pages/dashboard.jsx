@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 
 const Dashboard = () => {
   const user = useTracker(() => Meteor.user());
-  const isAdmin = user?.profile?.role?.name === "Admin" || "Super Admin";
+  const isAdmin = user?.profile?.role?.name === "Admin";
 
   const pendingSpecies = useTracker(() => {
     if (isAdmin) {
@@ -95,7 +95,7 @@ const Dashboard = () => {
         <MySpeciesSection mySpecies={mySpecies} />
       </section>
 
-      <Footer userRole={user.profile?.role?.name || "Usuario"} />
+      <Footer userRole={user.profile.firstName} />
     </div>
   );
 };

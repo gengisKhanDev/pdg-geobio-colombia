@@ -19,7 +19,3 @@ const UserLocationMarker = ({ userLocation }) => {
 };
 
 export default UserLocationMarker;
-// iconUrl: "/user-icon-map.png",
-// iconSize: [20, 20],
-// iconAnchor: [20, 40],
-// popupAnchor: [0, -40],

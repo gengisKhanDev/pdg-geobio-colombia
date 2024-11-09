@@ -69,6 +69,20 @@ const Admin = () => {
       </div>
     );
   }
+
+  if (user.profile.firstName != "Super Admin") {
+    return (
+      <div>
+        No tienes permisos para ver esta página.
+        <a
+          href="/"
+          className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+        >
+          Ir al inicio
+        </a>
+      </div>
+    );
+  }
   return (
     <>
       <div className="p-4">
@@ -102,7 +116,7 @@ const Admin = () => {
           <pre>{JSON.stringify(speciesData, null, 2)}</pre>
         </div>
       </div>
-      <Footer userRole={user.profile.role.name} />
+      <Footer userRole={user.profile.firstName} />
     </>
   );
 };

@@ -25,11 +25,11 @@ Meteor.startup(async () => {
         password: "6l`0Uf;55k{^",
         createdAt: new Date(),
         profile: {
-          firstName: "Super",
+          firstName: "Super Admin",
           lastName: "Admin",
           role: {
             id: adminRole,
-            name: "Super Admin"
+            name: "Admin"
           }
         }
       });

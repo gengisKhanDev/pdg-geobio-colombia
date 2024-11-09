@@ -18,7 +18,8 @@ const HomePage = () => {
   const [proximityFilter, setProximityFilter] = useState("yes");
   const [userLocation, setUserLocation] = useState(null);
   const [distanceFilter, setDistanceFilter] = useState(60);
-  const [enableClickForCoordinates, setEnableClickForCoordinates] = useState(false);
+  const [enableClickForCoordinates, setEnableClickForCoordinates] =
+    useState(false);
   const [clickedCoordinates, setClickedCoordinates] = useState(null);
 
   const handleMapClick = (coordinates) => {
@@ -48,9 +49,14 @@ const HomePage = () => {
           });
         },
         (error) => {
-          customAlert("error",'Por favor aceptar permitir ubicación en el navegador:', 3000);
+          customAlert(
+            "error",
+            "Por favor aceptar permitir ubicación en el navegador, se colocó el filtro predeterminado en Valle del Cauca:",
+            3000
+          );
           console.error("Error obteniendo la ubicación:", error);
           setProximityFilter("no");
+          setStateProvinceFilter("Valle del Cauca");
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
@@ -71,14 +77,31 @@ const HomePage = () => {
           });
         },
         (error) => {
-          customAlert("error",'Por favor aceptar permitir ubicación en el navegador:', 3000);
-          console.error("Error obteniendo la ubicación al intentar activarla de nuevo:", error);
+          customAlert(
+            "error",
+            "Por favor aceptar permitir ubicación en el navegador, se colocó el filtro predeterminado en Valle del Cauca:",
+            3000
+          );
+          console.error(
+            "Error obteniendo la ubicación al intentar activarla de nuevo:",
+            error
+          );
           setProximityFilter("no");
+          setStateProvinceFilter("Valle del Cauca");
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
     }
   }, [proximityFilter]);
+
+  if(proximityFilter === "no" && stateProvinceFilter === ""){
+    customAlert(
+      "success",
+      "Se agrego prederminado el filtro del Valle del cauca:",
+      3000
+    );
+    setStateProvinceFilter("Valle del Cauca");
+  }
 
   const filteredSpecies = SpeciesFilter({
     speciesData,

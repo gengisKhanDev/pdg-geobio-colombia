@@ -279,7 +279,7 @@ export function Publicar() {
           </form>
         </div>
       </div>
-      <Footer userRole={user.profile.role.name} />
+      <Footer userRole={user.profile.firstName} />
     </>
   );
 }

@@ -56,7 +56,7 @@ const MyAccount = () => {
           Cerrar sesión
         </button>
       </div>
-      <Footer userRole={role.name} />
+      <Footer userRole={user.profile.firstName} />
     </>
   );
 };
