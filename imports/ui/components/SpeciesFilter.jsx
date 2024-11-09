@@ -12,7 +12,7 @@ const SpeciesFilter = ({
   distanceFilter,
 }) => {
   const filteredSpecies = useMemo(() => {
-    if (userLocation || proximityFilter === "no") {
+    if (userLocation || proximityFilter === "no" ) {
       return speciesData.filter((species) => {
         const speciesLocation = {
           lat: species.latitude,
@@ -28,7 +28,7 @@ const SpeciesFilter = ({
             species.scientificName
               .toLowerCase()
               .includes(scientificNameFilter.toLowerCase())) &&
-          (!stateProvinceFilter ||
+          (!stateProvinceFilter || stateProvinceFilter === "All" || 
             species.stateProvince === stateProvinceFilter) &&
           (!iucnCategoryFilter ||
             species.iucnRedListCategory === iucnCategoryFilter ||

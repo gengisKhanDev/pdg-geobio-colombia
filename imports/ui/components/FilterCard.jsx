@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card } from "flowbite-react";
 import ScientificNameFilter from "./sidebar/ScientificNameFilter";
 import DistanceFilter from "./sidebar/DistanceFilter";
+import ProximityFilter from "./sidebar/ProximityFilter";
 import { useTracker } from "meteor/react-meteor-data";
 import { HiMenu, HiUser, HiLocationMarker } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,8 @@ export function FilterCard({
   setScientificName,
   setDistanceFilter,
   distanceFilter,
+  proximityFilter,
+  setProximityFilter,
   setEnableClickForCoordinates,
   coordinates,
   onCloseCoordinates,
@@ -49,7 +52,6 @@ export function FilterCard({
       navigate("/login"); // Si no está logueado, lo lleva a la página de Login
     }
   };
-
   return (
     <Card className="max-w-sm shadow-green-500/50 absolute top-4 left-4 p-2 bg-slate-100 text-black rounded-md shadow-lg button-top">
       <div className="flex items-center space-x-2">
@@ -71,7 +73,10 @@ export function FilterCard({
         value={scientificName}
         onChange={setScientificName}
       />
-      <DistanceFilter value={distanceFilter} onChange={setDistanceFilter} />
+      <ProximityFilter value={proximityFilter} onChange={setProximityFilter} />
+      {proximityFilter === "yes" && (
+        <DistanceFilter className="ml-4" value={distanceFilter} onChange={setDistanceFilter} />
+      )}
       <div className="flex items-center space-x-2">
         <Tooltip content="Click para activar(azul) y poder sacar coordendas de un punto en el mapa.">
           <HiLocationMarker

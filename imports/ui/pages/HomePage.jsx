@@ -7,6 +7,7 @@ import { FilterCard } from "../components/FilterCard";
 import FilterSidebar from "../components/FilterSidebar";
 import SidebarController from "../components/SidebarController";
 import SpeciesFilter from "../components/SpeciesFilter";
+import { customAlert } from "../../startup/client/custom-alert.js";
 
 const HomePage = () => {
   const sidebarRef = useRef(null);
@@ -47,7 +48,9 @@ const HomePage = () => {
           });
         },
         (error) => {
+          customAlert("error",'Por favor aceptar permitir ubicación en el navegador:', 3000);
           console.error("Error obteniendo la ubicación:", error);
+          setProximityFilter("no");
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
@@ -57,6 +60,25 @@ const HomePage = () => {
       };
     }
   }, []);
+
+  useEffect(() => {
+    if (proximityFilter === "yes" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+        },
+        (error) => {
+          customAlert("error",'Por favor aceptar permitir ubicación en el navegador:', 3000);
+          console.error("Error obteniendo la ubicación al intentar activarla de nuevo:", error);
+          setProximityFilter("no");
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    }
+  }, [proximityFilter]);
 
   const filteredSpecies = SpeciesFilter({
     speciesData,
@@ -82,6 +104,8 @@ const HomePage = () => {
           setScientificName={setScientificNameFilter}
           distanceFilter={distanceFilter}
           setDistanceFilter={setDistanceFilter}
+          proximityFilter={proximityFilter}
+          setProximityFilter={setProximityFilter}
           setEnableClickForCoordinates={setEnableClickForCoordinates}
           coordinates={clickedCoordinates} // Pass coordinates here
           onCloseCoordinates={handleCardClose} // Pass function to clear coordinates

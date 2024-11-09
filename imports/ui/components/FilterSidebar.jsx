@@ -4,11 +4,11 @@ import ScientificNameFilter from "./sidebar/ScientificNameFilter";
 import StateProvinceFilter from "./sidebar/StateProvinceFilter";
 import IUCNCategoryFilter from "./sidebar/IUCNCategoryFilter";
 import { Sidebar } from "flowbite-react";
-import { HiFilter, HiAdjustments, HiX, HiLogin } from "react-icons/hi";
+import { HiFilter, HiAdjustments, HiX } from "react-icons/hi";
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import { useNavigate } from "react-router-dom";
-import DistanceFilter from "./sidebar/DistanceFilter"; // Importar el nuevo componente
+import DistanceFilter from "./sidebar/DistanceFilter";
 
 const FilterSidebar = forwardRef(
   (
@@ -23,19 +23,18 @@ const FilterSidebar = forwardRef(
       setStateProvinceFilter,
       iucnCategoryFilter,
       setIUCNCategoryFilter,
-      distanceFilter, // Añadir el filtro de distancia como propiedad
-      setDistanceFilter, // Añadir la función para cambiar la distancia
+      distanceFilter,
+      setDistanceFilter,
     },
     ref
   ) => {
-    const user = useTracker(() => Meteor.user()); // Estado del usuario
-    const navigate = useNavigate(); // Para la navegación entre páginas
-
+    const user = useTracker(() => Meteor.user());
+    const navigate = useNavigate();
     const handleLoginClick = () => {
       if (user) {
-        navigate("/myaccount"); // Si el usuario está logueado, va a "My Account"
+        navigate("/myaccount");
       } else {
-        navigate("/login"); // Si no está logueado, lo lleva a la página de Login
+        navigate("/login");
       }
     };
     return (
@@ -71,6 +70,15 @@ const FilterSidebar = forwardRef(
                 />
               </Sidebar.Item>
 
+              {proximityFilter === "yes" && (
+                <Sidebar.Item icon={HiFilter} className="ml-8">
+                  <DistanceFilter
+                    value={distanceFilter}
+                    onChange={setDistanceFilter}
+                  />
+                </Sidebar.Item>
+              )}
+
               <Sidebar.Item icon={HiFilter}>
                 <ScientificNameFilter
                   value={scientificNameFilter}
@@ -92,12 +100,7 @@ const FilterSidebar = forwardRef(
                 />
               </Sidebar.Item>
               {/* Añadir el filtro de distancia */}
-              <Sidebar.Item icon={HiFilter}>
-                <DistanceFilter
-                  value={distanceFilter}
-                  onChange={setDistanceFilter}
-                />
-              </Sidebar.Item>
+
               <button
                 className="p-2 bg-blue-600 text-white rounded mt-4"
                 onClick={handleLoginClick}
