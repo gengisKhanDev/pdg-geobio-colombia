@@ -90,13 +90,13 @@ const Admin = () => {
           className="px-4 py-2 bg-blue-600 text-white rounded-lg"
           onClick={handleClick}
         >
-          Click para agregar especies
+          Click para insertar especies de la API
         </button>
         <button
           className="px-4 mx-4 py-2 bg-red-600 text-white rounded-lg"
           onClick={handleClickDelete}
         >
-          Click para borrar
+          Click para borrar todas las especies
         </button>
         {users.map((user) => (
           <div
