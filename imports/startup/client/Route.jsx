@@ -6,7 +6,7 @@ import { Test } from "../../ui/pages/test.jsx";
 import LoginPage from "../../ui/pages/LoginPage.jsx";  // Import the new login page
 import SignUp from "../../ui/pages/SignUp.jsx";  // Import the new login page
 import MyAccount from "../../ui/pages/MyAccount.jsx";
-import Dashboard from "../../ui/pages/dashboard.jsx";
+import Dashboard from "../../ui/pages/Dashboard.jsx";
 import Admin from "../../ui/pages/Admin.jsx";
 import { Publicar } from "../../ui/pages/Publicar.jsx";
 
